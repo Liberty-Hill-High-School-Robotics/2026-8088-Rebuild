@@ -13,12 +13,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import frc.robot.Constants.CanIDs;
 
 public class DriveConstants {
-  public static final double maxSpeedMetersPerSec = 4.8;
+  public static final double maxSpeedMetersPerSec = 4.92;
   public static final double odometryFrequency = 100.0; // Hz
-  public static final double trackWidth = Units.inchesToMeters(26.5);
-  public static final double wheelBase = Units.inchesToMeters(26.5);
+  public static final double trackWidth = Units.inchesToMeters(23);
+  public static final double wheelBase = Units.inchesToMeters(23);
   public static final double driveBaseRadius = Math.hypot(trackWidth / 2.0, wheelBase / 2.0);
   public static final Translation2d[] moduleTranslations =
       new Translation2d[] {
@@ -29,23 +30,23 @@ public class DriveConstants {
       };
 
   // Zeroed rotation values for each module, see setup instructions
-  public static final Rotation2d frontLeftZeroRotation = new Rotation2d(0.0);
+  public static final Rotation2d frontLeftZeroRotation = new Rotation2d(-Math.PI / 2);
   public static final Rotation2d frontRightZeroRotation = new Rotation2d(0.0);
-  public static final Rotation2d backLeftZeroRotation = new Rotation2d(0.0);
-  public static final Rotation2d backRightZeroRotation = new Rotation2d(0.0);
+  public static final Rotation2d backLeftZeroRotation = new Rotation2d(Math.PI);
+  public static final Rotation2d backRightZeroRotation = new Rotation2d(Math.PI / 2);
 
   // Device CAN IDs
-  public static final int pigeonCanId = 9;
+  public static final int pigeonCanId = CanIDs.kGyroID;
 
-  public static final int frontLeftDriveCanId = 1;
-  public static final int backLeftDriveCanId = 3;
-  public static final int frontRightDriveCanId = 5;
-  public static final int backRightDriveCanId = 7;
+  public static final int frontLeftDriveCanId = CanIDs.kFLDrivingCAN;
+  public static final int backLeftDriveCanId = CanIDs.kBLDrivingCAN;
+  public static final int frontRightDriveCanId = CanIDs.kFRDrivingCAN;
+  public static final int backRightDriveCanId = CanIDs.kBRDrivingCAN;
 
-  public static final int frontLeftTurnCanId = 2;
-  public static final int backLeftTurnCanId = 4;
-  public static final int frontRightTurnCanId = 6;
-  public static final int backRightTurnCanId = 8;
+  public static final int frontLeftTurnCanId = CanIDs.kFLTurningCAN;
+  public static final int backLeftTurnCanId = CanIDs.kBLTurningCAN;
+  public static final int frontRightTurnCanId = CanIDs.kFRTurningCAN;
+  public static final int backRightTurnCanId = CanIDs.kBRTurningCAN;
 
   // Drive motor configuration
   public static final int driveMotorCurrentLimit = 50;
@@ -93,8 +94,8 @@ public class DriveConstants {
   public static final double turnPIDMaxInput = 2 * Math.PI; // Radians
 
   // PathPlanner configuration
-  public static final double robotMassKg = 74.088;
-  public static final double robotMOI = 6.883;
+  public static final double robotMassKg = 49.895;
+  public static final double robotMOI = 6.075;
   public static final double wheelCOF = 1.2;
   public static final RobotConfig ppConfig =
       new RobotConfig(

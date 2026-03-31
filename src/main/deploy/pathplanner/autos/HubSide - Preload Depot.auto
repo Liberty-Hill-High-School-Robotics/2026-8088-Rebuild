@@ -1,0 +1,120 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HubSide - Start to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinUpShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 2.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FixAngle"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootInHub"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PivotOut"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HubSide - Shoot to Depot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeIn"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "HubSide - Depot to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "SpinUpShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShootInHub"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "FixAngle"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "2",
+  "choreoAuto": false
+}
