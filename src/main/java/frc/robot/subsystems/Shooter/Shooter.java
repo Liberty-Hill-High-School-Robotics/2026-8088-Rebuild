@@ -9,6 +9,8 @@ import org.littletonrobotics.junction.Logger;
 public class Shooter extends SubsystemBase {
   private final ShooterIO io;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+  private double frontVelocity = 0;
+  private double backVelocity = 0;
 
   private double testingPoint = 3000;
   private double testBackingRatio = .3;
@@ -39,6 +41,16 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Shooter/TestBackinRatio", testBackingRatio);
     SmartDashboard.putNumber("Shooter/Front/TestVelocity", testingPoint);
     SmartDashboard.putNumber("Shooter/Back/TestVelocity", testingPoint * testBackingRatio);
+
+    // Log flywheel setpoint
+    Logger.recordOutput("Shooter/Front/Setpoint", frontVelocity, "rpm");
+    Logger.recordOutput("Shooter/Back/Setpoint", backVelocity, "rpm");
+
+    boolean frontAtSpeed = MathUtil.isNear(frontVelocity, inputs.frontVelocity, 350);
+    boolean backAtSpeed = MathUtil.isNear(backVelocity, inputs.backVelocity, 350);
+
+    SmartDashboard.putBoolean("Shooter/Front/AtSpeed", frontAtSpeed);
+    SmartDashboard.putBoolean("Shooter/Back/AtSpeed", backAtSpeed);
   }
 
   @Override
@@ -53,7 +65,7 @@ public class Shooter extends SubsystemBase {
 
   public void shootFromDistance() {
     double distance = SmartDashboard.getNumber("Distance to Target Hub", 0);
-    double frontVelocity =
+    frontVelocity =
         179.836
             + (595.497 * distance)
             + (264.868
@@ -64,28 +76,41 @@ public class Shooter extends SubsystemBase {
             + (0.332342
                 * Math.pow(
                     distance, 2)); // TODO: equation to convert fron distance to backing ratio
-    double backVelocity = frontVelocity * backingRatio;
+    backVelocity = frontVelocity * backingRatio;
 
     frontVelocity = MathUtil.clamp(frontVelocity, -6700, 6700);
     backVelocity = MathUtil.clamp(backVelocity, -6700, 6700);
 
     io.setVelocity(frontVelocity, backVelocity);
+  }
 
-    // Log flywheel setpoint
-    Logger.recordOutput("Shooter/Front/Setpoint", frontVelocity, "rpm");
-    Logger.recordOutput("Shooter/Back/Setpoint", backVelocity, "rpm");
+  public void shootFromDistanceAirMail() {
+    double distance = SmartDashboard.getNumber("Distance to Target Air Mail", 0);
+    frontVelocity =
+        179.836
+            + (595.497 * distance)
+            + (264.868
+                * Math.pow(distance, 2)); // TODO: equation to convert from distance to shooter RPM
+    double backingRatio =
+        4.5667
+            - (2.51262 * distance)
+            + (0.332342
+                * Math.pow(
+                    distance, 2)); // TODO: equation to convert fron distance to backing ratio
+    backVelocity = frontVelocity * backingRatio;
+
+    frontVelocity = MathUtil.clamp(frontVelocity, -6700, 6700);
+    backVelocity = MathUtil.clamp(backVelocity, -6700, 6700);
+
+    io.setVelocity(frontVelocity, backVelocity);
   }
 
   public void shootAtTestingSpeed() {
-    double frontVelocity = testingPoint;
-    double backVelocity = frontVelocity * testBackingRatio;
+    frontVelocity = testingPoint;
+    backVelocity = frontVelocity * testBackingRatio;
     frontVelocity = MathUtil.clamp(frontVelocity, -6700, 6700);
     backVelocity = MathUtil.clamp(backVelocity, -6700, 6700);
     io.setVelocity(testingPoint, backVelocity);
-
-    // Log flywheel setpoint
-    Logger.recordOutput("Shooter/Front/Setpoint", frontVelocity, "rpm");
-    Logger.recordOutput("Shooter/Back/Setpoint", backVelocity, "rpm");
   }
 
   public void changeTestVelocity(double amount) {
@@ -99,5 +124,7 @@ public class Shooter extends SubsystemBase {
   /** Stops the flywheel. */
   public void shooterStop() {
     io.stop();
+    frontVelocity = 0;
+    backVelocity = 0;
   }
 }

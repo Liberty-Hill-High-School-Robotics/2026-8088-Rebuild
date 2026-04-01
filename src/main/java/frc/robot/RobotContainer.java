@@ -236,6 +236,19 @@ public class RobotContainer {
             () ->
                 Rotation2d.fromDegrees(SmartDashboard.getNumber("Robot Angle to Target Hub", 0))));
 
+    /*
+    final Trigger AirMail = m_driverController.axisGreaterThan(5, .3);
+    AirMail.whileTrue(new AirMail(m_indexer, m_shooter));
+    AirMail.whileTrue(
+        DriveCommands.joystickDriveAtAngle(
+            m_drive,
+            () -> -m_driverController.getRawAxis(1) * Constants.kDriveShootingRatio,
+            () -> -m_driverController.getRawAxis(0) * Constants.kDriveShootingRatio,
+            () ->
+                Rotation2d.fromDegrees(
+                    SmartDashboard.getNumber("Robot Angle to Target Air Mail", 0))));
+                    */
+
     final Trigger ShootAtTestingSpeed = m_driverController.button(1);
     ShootAtTestingSpeed.whileTrue(new ShootAtTestingSpeed(m_shooter));
 

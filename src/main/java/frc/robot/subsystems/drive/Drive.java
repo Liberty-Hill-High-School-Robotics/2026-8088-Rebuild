@@ -18,6 +18,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -178,6 +179,7 @@ public class Drive extends SubsystemBase {
     gyroDisconnectedAlert.set(!gyroInputs.connected && Constants.currentMode != Mode.SIM);
 
     getRobotToHubAngle();
+    getRobotToAirMailAngle();
   }
 
   /**
@@ -262,10 +264,66 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("Drive/AngleToTargetHub", angleToTarget, "degrees");
 
     boolean DriveOnTarget =
-        angleToTarget + Constants.kTargetAllowedError > getPose().getRotation().getDegrees()
-            && angleToTarget - Constants.kTargetAllowedError < getPose().getRotation().getDegrees();
+        MathUtil.isNear(
+            angleToTarget, getPose().getRotation().getDegrees(), Constants.kTargetAllowedError);
     SmartDashboard.putBoolean("Drive On Target Hub", DriveOnTarget);
     Logger.recordOutput("Drive/DriveOnTarget", DriveOnTarget);
+
+    return angleToTarget;
+  }
+
+  public double getRobotToAirMailAngle() {
+    Pose2d hubSetpoint;
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
+      hubSetpoint = FieldConstants.kBlueHubPose;
+    } else {
+      hubSetpoint = FieldConstants.kRedHubPose;
+    }
+
+    Pose2d airMailSetpoint;
+    if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue) {
+      if (getPose().getY() < hubSetpoint.getY()) { // if turret is below hub
+        airMailSetpoint = FieldConstants.kBlueLowAirMail;
+      } else {
+        airMailSetpoint = FieldConstants.kBlueTopAirMail;
+      }
+    } else {
+      if (getPose().getY() < hubSetpoint.getY()) { // if turret is below hub
+        airMailSetpoint = FieldConstants.kRedLowAirMail;
+      } else {
+        airMailSetpoint = FieldConstants.kRedTopAirMail;
+      }
+    }
+
+    double x = airMailSetpoint.getX();
+    double y = airMailSetpoint.getY();
+
+    double robotToTargetY = 0;
+    double robotToTargetX = 0;
+    double angleToTarget = 0;
+
+    if (getPose().getY() < hubSetpoint.getY()) { // if turret is below hub
+      robotToTargetY = y - getPose().getY();
+      robotToTargetX = x - getPose().getX();
+      angleToTarget = Units.radiansToDegrees(Math.atan2(robotToTargetY, robotToTargetX));
+    } else {
+      robotToTargetY = getPose().getY() - y;
+      robotToTargetX = getPose().getX() - x;
+      angleToTarget = Units.radiansToDegrees(Math.atan2(robotToTargetY, robotToTargetX)) - 180;
+    }
+
+    double robotToTarget = Math.hypot(robotToTargetX, robotToTargetY);
+    SmartDashboard.putNumber("Distance to Target Air Mail", robotToTarget);
+    Logger.recordOutput("Drive/DistanceToTargetMail", robotToTarget, "meters");
+
+    SmartDashboard.putNumber("Robot Angle to Target Air Mail", angleToTarget);
+    Logger.recordOutput("Drive/AngleToTargetMail", angleToTarget, "degrees");
+
+    boolean DriveOnTarget =
+        MathUtil.isNear(
+            angleToTarget, getPose().getRotation().getDegrees(), Constants.kTargetAllowedError);
+    SmartDashboard.putBoolean("Drive On Target Mail", DriveOnTarget);
+    Logger.recordOutput("Drive/DriveOnTarget Mail", DriveOnTarget);
 
     return angleToTarget;
   }

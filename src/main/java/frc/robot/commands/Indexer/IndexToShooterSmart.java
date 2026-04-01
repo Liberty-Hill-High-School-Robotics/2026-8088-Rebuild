@@ -8,11 +8,11 @@ import frc.robot.subsystems.Indexer.Indexer;
  * pedagogical purposes. Actual code should inline a command this simple with {@link
  * edu.wpi.first.wpilibj2.command.InstantCommand}.
  */
-public class IndexToShooter extends Command {
+public class IndexToShooterSmart extends Command {
   // The subsystem the command runs on
   private final Indexer m_indexer;
 
-  public IndexToShooter(Indexer subsystem) {
+  public IndexToShooterSmart(Indexer subsystem) {
     m_indexer = subsystem;
     addRequirements(m_indexer);
   }
@@ -22,7 +22,7 @@ public class IndexToShooter extends Command {
 
   @Override
   public void execute() {
-    m_indexer.indexToShooter();
+    m_indexer.indexToShooterSmart();
   }
 
   @Override

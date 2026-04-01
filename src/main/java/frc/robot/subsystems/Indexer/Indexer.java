@@ -9,6 +9,7 @@ import org.littletonrobotics.junction.Logger;
 public class Indexer extends SubsystemBase {
   private final IndexerIO io;
   private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
+  private double setpoint = 0;
 
   public Indexer(IndexerIO io) {
     this.io = io;
@@ -32,6 +33,8 @@ public class Indexer extends SubsystemBase {
     // Put smartdashboard stuff, check for limit switches
     Logger.processInputs("Index", inputs);
     io.updateInputs(inputs);
+
+    Logger.recordOutput("Indexer/Setpoint", setpoint, "rpm");
   }
 
   @Override
@@ -44,21 +47,28 @@ public class Indexer extends SubsystemBase {
   // here. Call these from Commands.
   // Should include run/stop/run back, etc.
 
-  public void indexToShooter() {
-    double setpoint;
+  public void indexToShooterSmart() {
     if (SmartDashboard.getBoolean("Drive On Target Hub", true)) {
-      io.setVelocity(MotorSpeeds.kIndexSpeed);
-      setpoint = MotorSpeeds.kIndexSpeed;
+      if (SmartDashboard.getBoolean("Shooter/Front/AtSpeed", true)
+          && SmartDashboard.getBoolean("Shooter/Back/AtSpeed", true)) {
+        io.setVelocity(MotorSpeeds.kIndexSpeed);
+        setpoint = MotorSpeeds.kIndexSpeed;
+      } else {
+        indexStop();
+      }
     } else {
-      setpoint = 0;
+      indexStop();
     }
+  }
 
-    // Log indexer setpoint
-    Logger.recordOutput("Indexer/Setpoint", setpoint, "rpm");
+  public void indexToShooterDumb() {
+    io.setVelocity(MotorSpeeds.kIndexSpeed);
+    setpoint = MotorSpeeds.kIndexSpeed;
   }
 
   /** Stops the indexer. */
   public void indexStop() {
     io.stop();
+    setpoint = 0;
   }
 }

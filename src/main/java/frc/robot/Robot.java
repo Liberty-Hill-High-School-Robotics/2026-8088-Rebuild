@@ -10,12 +10,16 @@ package frc.robot;
 import com.revrobotics.util.StatusLogger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.CanIDs;
+import java.util.HashMap;
+import java.util.Map;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -63,9 +67,25 @@ public class Robot extends LoggedRobot {
         Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
         break;
     }
+    Map<Integer, String> urclMap = new HashMap<>();
+    urclMap.put(CanIDs.kFLDrivingCAN, "Drive Front Left");
+    urclMap.put(CanIDs.kFRDrivingCAN, "Drive Front Right");
+    urclMap.put(CanIDs.kBLDrivingCAN, "Drive Back Left");
+    urclMap.put(CanIDs.kBRDrivingCAN, "Drive Back Right");
+    urclMap.put(CanIDs.kFLTurningCAN, "Turn Front Left");
+    urclMap.put(CanIDs.kFRTurningCAN, "Turn Front Right");
+    urclMap.put(CanIDs.kBLTurningCAN, "Turn Back Left");
+    urclMap.put(CanIDs.kBRTurningCAN, "Turn Back Right");
+    urclMap.put(CanIDs.kIntakeMotor, "Intake");
+    urclMap.put(CanIDs.kIntakePiviotMotor, "Intake Pivot");
+    urclMap.put(CanIDs.kIndexLeadMotor, "Index Lead");
+    urclMap.put(CanIDs.kIndexFollowMotor, "Index Follow");
+    urclMap.put(CanIDs.kShooterFrontLeadMotor, "Shooter Front Lead");
+    urclMap.put(CanIDs.kShooterFrontFollowMotor, "Shooter Front Follow");
+    urclMap.put(CanIDs.kShooterBackLeadMotor, "Shooter Back Lead");
+    urclMap.put(CanIDs.kShooterBackFollowMotor, "Shooter Back Follow");
 
-    // Initialize URCL
-    // Logger.registerURCL(URCL.startExternal());
+    Logger.registerURCL(URCL.startExternal(urclMap));
     StatusLogger.disableAutoLogging(); // Disable REVLib's built-in logging
 
     // Start AdvantageKit logger

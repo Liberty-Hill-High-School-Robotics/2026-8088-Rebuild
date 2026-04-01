@@ -162,13 +162,17 @@ public final class Constants {
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
-    public static final Matrix<N3, N1> kFrontSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kFrontSingleTagStdDevs =
+        VecBuilder.fill(4, 4, 8); // lower = more trust in vision
     public static final Matrix<N3, N1> kFrontMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
     public static final Transform3d kSideRobotToCam =
         new Transform3d(
             new Translation3d(0, 0.0, 0),
-            new Rotation3d(0, 0, 0)); // TODO: get real numbers from CAD
+            new Rotation3d(
+                0,
+                Units.degreesToRadians(15),
+                Units.degreesToRadians(90))); // TODO: get real numbers from CAD
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
