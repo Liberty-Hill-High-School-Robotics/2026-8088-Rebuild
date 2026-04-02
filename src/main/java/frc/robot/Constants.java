@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -87,15 +88,15 @@ public final class Constants {
 
     // Shooter Front
     public static final double kShooterFrontP = 0.00034;
-    public static final double kShooterFrontI = 0.0;
+    public static final double kShooterFrontI = 0.0000001;
     public static final double kShooterFrontD = 0.0;
 
     public static final double kShooterFrontS = 0.173;
     public static final double kShooterFrontV = 0.0017699115044248;
 
     // Shooter Back
-    public static final double kShooterBackP = 0.00032;
-    public static final double kShooterBackI = 0.0;
+    public static final double kShooterBackP = 0.0003;
+    public static final double kShooterBackI = 0.0000001;
     public static final double kShooterBackD = 0.0;
 
     public static final double kShooterBackS = 0.151;
@@ -145,6 +146,26 @@ public final class Constants {
     public static final double kIndexMOI = 0.003; // TODO: calc for real MOI
 
     public static final double kIndexSpeed = 3000.0; // speed to run index motor RPM
+
+    public static InterpolatingDoubleTreeMap kDistanceToRPMMap = new InterpolatingDoubleTreeMap();
+
+    static {
+      kDistanceToRPMMap.put(1.163880614, 1200.0);
+      kDistanceToRPMMap.put(2.011616483, 2110.0);
+      kDistanceToRPMMap.put(2.828957109, 2700.0);
+      kDistanceToRPMMap.put(3.002837776, 3100.0);
+      kDistanceToRPMMap.put(4.019709447, 3500.0);
+    }
+
+    public static InterpolatingDoubleTreeMap kDistanceToBacking = new InterpolatingDoubleTreeMap();
+
+    static {
+      kDistanceToBacking.put(1.163880614, 1.7);
+      kDistanceToBacking.put(2.011616483, 0.9);
+      kDistanceToBacking.put(2.828957109, 0.5);
+      kDistanceToBacking.put(3.002837776, 0.4);
+      kDistanceToBacking.put(4.019709447, 0.3);
+    }
   }
 
   public static final class OIConstants {
@@ -168,22 +189,22 @@ public final class Constants {
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
-    public static final Matrix<N3, N1> kFrontSingleTagStdDevs =
-        VecBuilder.fill(4, 4, 8); // lower = more trust in vision
-    public static final Matrix<N3, N1> kFrontMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    public static final Matrix<N3, N1> kSideSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kSideMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
     public static final Transform3d kSideRobotToCam =
         new Transform3d(
-            new Translation3d(0, 0, 0),
+            new Translation3d(0, Units.inchesToMeters(10.25), Units.inchesToMeters(10.5)),
             new Rotation3d(
                 0,
                 Units.degreesToRadians(15),
-                Units.degreesToRadians(90))); // TODO: get real numbers from CAD
+                Units.degreesToRadians(-90))); // TODO: get real numbers from CAD
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
-    public static final Matrix<N3, N1> kSideSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-    public static final Matrix<N3, N1> kSideMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    public static final Matrix<N3, N1> kFrontSingleTagStdDevs =
+        VecBuilder.fill(5, 5, 10); // lower = more trust in vision
+    public static final Matrix<N3, N1> kFrontMultiTagStdDevs = VecBuilder.fill(1, 1, 2);
   }
 
   public static final class FieldConstants {

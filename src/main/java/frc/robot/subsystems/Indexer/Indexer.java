@@ -71,4 +71,9 @@ public class Indexer extends SubsystemBase {
     io.stop();
     setpoint = 0;
   }
+
+  public void indexReverse() {
+    io.setVelocity(-MotorSpeeds.kIndexSpeed);
+    setpoint = -MotorSpeeds.kIndexSpeed;
+  }
 }

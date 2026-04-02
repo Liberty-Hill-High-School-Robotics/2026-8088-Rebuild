@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.MotorSpeeds;
 import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
@@ -65,6 +66,7 @@ public class Shooter extends SubsystemBase {
 
   public void shootFromDistance() {
     double distance = SmartDashboard.getNumber("Distance to Target Hub", 0);
+    /*
     frontVelocity =
         179.836
             + (595.497 * distance)
@@ -76,6 +78,9 @@ public class Shooter extends SubsystemBase {
             + (0.332342
                 * Math.pow(
                     distance, 2)); // TODO: equation to convert fron distance to backing ratio
+                    */
+    frontVelocity = MotorSpeeds.kDistanceToRPMMap.get(distance);
+    double backingRatio = MotorSpeeds.kDistanceToBacking.get(distance);
     backVelocity = frontVelocity * backingRatio;
 
     frontVelocity = MathUtil.clamp(frontVelocity, -6700, 6700);
@@ -86,17 +91,20 @@ public class Shooter extends SubsystemBase {
 
   public void shootFromDistanceAirMail() {
     double distance = SmartDashboard.getNumber("Distance to Target Air Mail", 0);
-    frontVelocity =
-        179.836
-            + (595.497 * distance)
-            + (264.868
+    /*frontVelocity =
+        555.952
+            + (384.884 * distance)
+            + (558.952
                 * Math.pow(distance, 2)); // TODO: equation to convert from distance to shooter RPM
     double backingRatio =
-        4.5667
-            - (2.51262 * distance)
-            + (0.332342
+        3.35759
+            - (1.7022 * distance)
+            + (0.238865
                 * Math.pow(
                     distance, 2)); // TODO: equation to convert fron distance to backing ratio
+                    */
+    frontVelocity = MotorSpeeds.kDistanceToRPMMap.get(distance);
+    double backingRatio = MotorSpeeds.kDistanceToBacking.get(distance);
     backVelocity = frontVelocity * backingRatio;
 
     frontVelocity = MathUtil.clamp(frontVelocity, -6700, 6700);
