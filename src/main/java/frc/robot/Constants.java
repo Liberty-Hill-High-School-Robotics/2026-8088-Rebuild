@@ -34,8 +34,8 @@ public final class Constants {
 
   public static final double kTargetAllowedError = 10;
 
-  public static final double kIntakePiviotExtendedLim = 0; // Motor rotations
-  public static final double kIntakePiviotRetractedLim = -9.443945; // Motor rotations
+  public static final double kIntakePiviotExtendedLim = 9.543945; // Motor rotations
+  public static final double kIntakePiviotRetractedLim = .5; // Motor rotations
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -115,13 +115,18 @@ public final class Constants {
 
     // Intake Pivot
     public static final double kIntakePivotP = 0.002;
-    public static final double kIntakePivotI = 0.00001;
+    public static final double kIntakePivotI = 0.000001;
     public static final double kIntakePivotD = 0.0000001;
     // https://docs.revrobotics.com/revlib/spark/closed-loop/feed-forward-control?q=tunning#manually-finding-kcos-and-ks-for-an-arm
     // Do first
     public static final double kIntakePivotS = 0.6215;
+    public static final double kIntakePivotV = 0.0017699115044248;
+    /*
     public static final double kIntakePivotCos = 1.2415;
     public static final double kIntakePivotCosRatio = 32.0000;
+    */
+
+    public static final double kIntakePivotSpeed = 500.0;
 
     // Intake MOI for SIM
     public static final double kIntakePivotMOI = 0.01; // TODO: calc for real MOI
@@ -156,7 +161,9 @@ public final class Constants {
     public static final Transform3d kFrontRobotToCam =
         new Transform3d(
             new Translation3d(
-                Units.inchesToMeters(0), Units.inchesToMeters(0), Units.inchesToMeters(0)),
+                Units.inchesToMeters(0),
+                Units.inchesToMeters(7.11216728),
+                Units.inchesToMeters(11.34720739)),
             new Rotation3d(0, Units.degreesToRadians(15), 0)); // TODO: get real numbers from CAD
 
     // The standard deviations of our vision estimated poses, which affect correction rate
@@ -167,7 +174,7 @@ public final class Constants {
 
     public static final Transform3d kSideRobotToCam =
         new Transform3d(
-            new Translation3d(0, 0.0, 0),
+            new Translation3d(0, 0, 0),
             new Rotation3d(
                 0,
                 Units.degreesToRadians(15),

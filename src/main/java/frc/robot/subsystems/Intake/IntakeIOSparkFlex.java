@@ -38,7 +38,7 @@ public class IntakeIOSparkFlex implements IntakeIO {
     SparkFlexConfig intakePivotConfig = new SparkFlexConfig();
     intakePivotConfig
         .inverted(true)
-        .smartCurrentLimit(25)
+        .smartCurrentLimit(30)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(MotorSpeeds.kIntakePivotP)
@@ -46,10 +46,8 @@ public class IntakeIOSparkFlex implements IntakeIO {
         .d(MotorSpeeds.kIntakePivotD)
         .feedForward
         .kS(MotorSpeeds.kIntakePivotS)
-        .kCosRatio(MotorSpeeds.kIntakePivotCosRatio)
-        .kCos(MotorSpeeds.kIntakePivotCos);
-    intakePivotConfig.softLimit.forwardSoftLimitEnabled(true).forwardSoftLimit(-.1);
-    intakePivotConfig.limitSwitch.reverseLimitSwitchPosition(-9.543945);
+        .kV(MotorSpeeds.kIntakeV);
+    intakePivotConfig.limitSwitch.reverseLimitSwitchPosition(0);
 
     tryUntilOk(
         intakePivotMotor,
@@ -65,7 +63,6 @@ public class IntakeIOSparkFlex implements IntakeIO {
         .smartCurrentLimit(55)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .maxOutput(0.5)
         .p(MotorSpeeds.kIntakeP)
         .i(MotorSpeeds.kIntakeI)
         .d(MotorSpeeds.kIntakeD)
@@ -102,13 +99,22 @@ public class IntakeIOSparkFlex implements IntakeIO {
   // move the intake to its outward position
   @Override
   public void intakePivotOut() {
-    intakePivotController.setSetpoint(Constants.kIntakePiviotExtendedLim, ControlType.kPosition);
+    if (intakePivotMotor.getEncoder().getPosition() < Constants.kIntakePiviotExtendedLim) {
+      intakePivotController.setSetpoint(MotorSpeeds.kIntakePivotSpeed, ControlType.kVelocity);
+    } else {
+      intakePivotMotor.stopMotor();
+    }
   }
 
   // move the intake to its inward position
   @Override
   public void intakePivotIn() {
-    intakePivotController.setSetpoint(Constants.kIntakePiviotRetractedLim, ControlType.kPosition);
+    if (intakePivotMotor.getEncoder().getPosition() > Constants.kIntakePiviotRetractedLim
+        && !intakePivotMotor.getReverseLimitSwitch().isPressed()) {
+      intakePivotController.setSetpoint(-MotorSpeeds.kIntakePivotSpeed, ControlType.kVelocity);
+    } else {
+      intakePivotMotor.stopMotor();
+    }
   }
 
   // stop moving the intake
@@ -121,7 +127,7 @@ public class IntakeIOSparkFlex implements IntakeIO {
   @Override
   public void resetIntakePivotEncoder() {
     if (intakePivotMotor.getReverseLimitSwitch().isPressed()) {
-      intakePivotEncoder.setPosition(-9.543945);
+      intakePivotEncoder.setPosition(0);
     }
   }
 
