@@ -26,13 +26,15 @@ public class IndexerIOSparkFlex implements IndexerIO {
 
   public IndexerIOSparkFlex() {
     indexLeadMotor = new SparkFlex(CanIDs.kIndexLeadMotor, MotorType.kBrushless);
-    indexFollowMotor = new SparkFlex(CanIDs.kIndexLeadMotor, MotorType.kBrushless);
+    indexFollowMotor = new SparkFlex(CanIDs.kIndexFollowMotor, MotorType.kBrushless);
 
     indexEncoder = indexLeadMotor.getEncoder();
 
     // Config Leader
     SparkFlexConfig indexLeadConfig = new SparkFlexConfig();
     indexLeadConfig
+        .smartCurrentLimit(40)
+        .inverted(true)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(MotorSpeeds.kIndexerP)
@@ -57,7 +59,7 @@ public class IndexerIOSparkFlex implements IndexerIO {
 
     // Config Follower
     SparkFlexConfig indexFollowConfig = new SparkFlexConfig();
-    indexFollowConfig.follow(indexLeadMotor).inverted(true);
+    indexFollowConfig.follow(indexLeadMotor, true).smartCurrentLimit(40);
 
     tryUntilOk(
         indexFollowMotor,

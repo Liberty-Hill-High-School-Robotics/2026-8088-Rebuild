@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.Indexer.IndexToShooterDumb;
 import frc.robot.commands.Intake.ChangeIsExtended;
 import frc.robot.commands.Intake.Eject;
 import frc.robot.commands.Intake.IntakeIn;
@@ -236,6 +237,12 @@ public class RobotContainer {
             () ->
                 Rotation2d.fromDegrees(SmartDashboard.getNumber("Robot Angle to Target Hub", 0))));
 
+    final Trigger PivotOut = m_operatorController.povUp();
+    PivotOut.whileTrue(new ChangeIsExtended(m_intake, true));
+
+    final Trigger PivotIn = m_operatorController.povDown();
+    PivotIn.whileTrue(new ChangeIsExtended(m_intake, false));
+
     /*
     final Trigger AirMail = m_driverController.axisGreaterThan(5, .3);
     AirMail.whileTrue(new AirMail(m_indexer, m_shooter));
@@ -251,9 +258,11 @@ public class RobotContainer {
 
     final Trigger ShootAtTestingSpeed = m_driverController.button(1);
     ShootAtTestingSpeed.whileTrue(new ShootAtTestingSpeed(m_shooter));
+    ShootAtTestingSpeed.whileTrue(new IndexToShooterDumb(m_indexer));
 
     final Trigger IncreaseTestingPoint = m_driverController.povUp();
     IncreaseTestingPoint.whileTrue(new ChangeTestingSpeed(m_shooter, 100));
+    IncreaseTestingPoint.whileTrue(new IntakeIn(m_intake));
 
     final Trigger DecreaseTestingSpeed = m_driverController.povDown();
     DecreaseTestingSpeed.whileTrue(new ChangeTestingSpeed(m_shooter, -100));

@@ -40,6 +40,7 @@ public class ShooterIOSparkFlex implements ShooterIO {
     // Config front Leader
     SparkFlexConfig frontLeadConfig = new SparkFlexConfig();
     frontLeadConfig
+        .smartCurrentLimit(50)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(MotorSpeeds.kShooterFrontP)
@@ -64,7 +65,7 @@ public class ShooterIOSparkFlex implements ShooterIO {
 
     // Config front Follower
     SparkFlexConfig frontFollowConfig = new SparkFlexConfig();
-    frontFollowConfig.follow(shooterFrontLeadMotor).inverted(true);
+    frontFollowConfig.follow(shooterFrontLeadMotor, true).smartCurrentLimit(50);
 
     tryUntilOk(
         shooterFrontFollowMotor,
@@ -76,6 +77,8 @@ public class ShooterIOSparkFlex implements ShooterIO {
     // Config back Leader
     SparkFlexConfig backLeadConfig = new SparkFlexConfig();
     backLeadConfig
+        .smartCurrentLimit(50)
+        .inverted(true)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(MotorSpeeds.kShooterBackP)
@@ -100,7 +103,7 @@ public class ShooterIOSparkFlex implements ShooterIO {
 
     // Config back Follower
     SparkFlexConfig backFollowConfig = new SparkFlexConfig();
-    backFollowConfig.follow(shooterBackLeadMotor).inverted(true);
+    backFollowConfig.follow(shooterBackLeadMotor, true).smartCurrentLimit(50);
 
     tryUntilOk(
         shooterBackFollowMotor,

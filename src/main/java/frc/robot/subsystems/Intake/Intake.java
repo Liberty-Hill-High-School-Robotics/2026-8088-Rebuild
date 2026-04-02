@@ -8,6 +8,7 @@ public class Intake extends SubsystemBase {
   private final IntakeIO io;
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   private boolean isExtended = false;
+  private double setpoint = 0;
 
   public Intake(IntakeIO io) {
     this.io = io;
@@ -38,7 +39,7 @@ public class Intake extends SubsystemBase {
     } else {
       pivotIn();
     }
-
+    Logger.recordOutput("Intake/PivotSetpoint", setpoint);
     Logger.recordOutput("Intake/IsExtended", isExtended);
   }
 
@@ -53,10 +54,12 @@ public class Intake extends SubsystemBase {
   // Should include run/stop/run back, etc.
   public void pivotIn() {
     io.intakePivotIn();
+    setpoint = -9.443945;
   }
 
   public void pivotOut() {
     io.intakePivotOut();
+    setpoint = Constants.kIntakePiviotExtendedLim;
   }
 
   public void pivotStop() {

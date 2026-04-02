@@ -37,6 +37,8 @@ public class IntakeIOSparkFlex implements IntakeIO {
     // Config Intake Pivot
     SparkFlexConfig intakePivotConfig = new SparkFlexConfig();
     intakePivotConfig
+        .inverted(true)
+        .smartCurrentLimit(25)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(MotorSpeeds.kIntakePivotP)
@@ -46,6 +48,8 @@ public class IntakeIOSparkFlex implements IntakeIO {
         .kS(MotorSpeeds.kIntakePivotS)
         .kCosRatio(MotorSpeeds.kIntakePivotCosRatio)
         .kCos(MotorSpeeds.kIntakePivotCos);
+    intakePivotConfig.softLimit.forwardSoftLimitEnabled(true).forwardSoftLimit(-.1);
+    intakePivotConfig.limitSwitch.reverseLimitSwitchPosition(-9.543945);
 
     tryUntilOk(
         intakePivotMotor,
@@ -57,8 +61,11 @@ public class IntakeIOSparkFlex implements IntakeIO {
     // Config Intake
     SparkFlexConfig intakeConfig = new SparkFlexConfig();
     intakeConfig
+        .inverted(true)
+        .smartCurrentLimit(55)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+        .maxOutput(0.5)
         .p(MotorSpeeds.kIntakeP)
         .i(MotorSpeeds.kIntakeI)
         .d(MotorSpeeds.kIntakeD)
@@ -89,7 +96,7 @@ public class IntakeIOSparkFlex implements IntakeIO {
         intakeMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.intakeCurrentAmps = intakeMotor.getOutputCurrent();
 
-    inputs.intakePivotAtLimit = intakeMotor.getForwardLimitSwitch().isPressed();
+    inputs.intakePivotAtLimit = intakePivotMotor.getReverseLimitSwitch().isPressed();
   }
 
   // move the intake to its outward position
@@ -101,7 +108,7 @@ public class IntakeIOSparkFlex implements IntakeIO {
   // move the intake to its inward position
   @Override
   public void intakePivotIn() {
-    intakePivotController.setSetpoint(0, ControlType.kPosition);
+    intakePivotController.setSetpoint(Constants.kIntakePiviotRetractedLim, ControlType.kPosition);
   }
 
   // stop moving the intake
@@ -113,8 +120,8 @@ public class IntakeIOSparkFlex implements IntakeIO {
   // Reset the intake pivot encoder to 0 when limit pressed
   @Override
   public void resetIntakePivotEncoder() {
-    if (intakeMotor.getForwardLimitSwitch().isPressed()) {
-      intakePivotEncoder.setPosition(0);
+    if (intakePivotMotor.getReverseLimitSwitch().isPressed()) {
+      intakePivotEncoder.setPosition(-9.543945);
     }
   }
 

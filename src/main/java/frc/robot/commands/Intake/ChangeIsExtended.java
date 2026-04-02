@@ -21,6 +21,7 @@ public class ChangeIsExtended extends Command {
 
   @Override
   public void initialize() {
+    m_intake.pivotStop();
     m_intake.setPivotExtended(extended);
   }
 

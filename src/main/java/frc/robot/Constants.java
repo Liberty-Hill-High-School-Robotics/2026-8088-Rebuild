@@ -34,7 +34,8 @@ public final class Constants {
 
   public static final double kTargetAllowedError = 10;
 
-  public static final double kIntakePiviotExtendedLim = .3; // Motor rotations
+  public static final double kIntakePiviotExtendedLim = 0; // Motor rotations
+  public static final double kIntakePiviotRetractedLim = -9.443945; // Motor rotations
 
   public static enum Mode {
     /** Running on a real robot. */
@@ -85,56 +86,56 @@ public final class Constants {
   public static final class MotorSpeeds {
 
     // Shooter Front
-    public static final double kShooterFrontP = 0.0;
+    public static final double kShooterFrontP = 0.00034;
     public static final double kShooterFrontI = 0.0;
     public static final double kShooterFrontD = 0.0;
 
-    public static final double kShooterFrontS = 0.0;
-    public static final double kShooterFrontV = 0.0;
+    public static final double kShooterFrontS = 0.173;
+    public static final double kShooterFrontV = 0.0017699115044248;
 
     // Shooter Back
-    public static final double kShooterBackP = 0.0;
+    public static final double kShooterBackP = 0.00032;
     public static final double kShooterBackI = 0.0;
     public static final double kShooterBackD = 0.0;
 
-    public static final double kShooterBackS = 0.0;
-    public static final double kShooterBackV = 0.0;
+    public static final double kShooterBackS = 0.151;
+    public static final double kShooterBackV = 0.0017699115044248;
 
     // Shooter MOI For SIM
     public static final double shooterFrontMOI = 0.003; // TODO: calc for real MOI
     public static final double shooterBackMOI = 0.003; // TODO: calc for real MOI
 
     // Intake
-    public static final double kIntakeP = 0.0;
+    public static final double kIntakeP = 0.0012;
     public static final double kIntakeI = 0.0;
     public static final double kIntakeD = 0.0;
 
-    public static final double kIntakeS = 0.0;
-    public static final double kIntakeV = 0.0;
+    public static final double kIntakeS = 0.213;
+    public static final double kIntakeV = 0.0017699115044248;
 
     // Intake Pivot
-    public static final double kIntakePivotP = 0.0;
-    public static final double kIntakePivotI = 0.0;
-    public static final double kIntakePivotD = 0.0;
+    public static final double kIntakePivotP = 0.002;
+    public static final double kIntakePivotI = 0.00001;
+    public static final double kIntakePivotD = 0.0000001;
     // https://docs.revrobotics.com/revlib/spark/closed-loop/feed-forward-control?q=tunning#manually-finding-kcos-and-ks-for-an-arm
     // Do first
-    public static final double kIntakePivotS = 0.0;
-    public static final double kIntakePivotCos = 0.0;
-    public static final double kIntakePivotCosRatio = 0.0313;
+    public static final double kIntakePivotS = 0.6215;
+    public static final double kIntakePivotCos = 1.2415;
+    public static final double kIntakePivotCosRatio = 32.0000;
 
     // Intake MOI for SIM
     public static final double kIntakePivotMOI = 0.01; // TODO: calc for real MOI
     public static final double kIntakeMOI = 0.003; // TODO: calc for real MOI
 
-    public static final double kIntakeSpeed = 4000.0; // speed to run intake motor RPM
+    public static final double kIntakeSpeed = 5500.0; // speed to run intake motor RPM
 
     // Index
-    public static final double kIndexerP = 0.0;
+    public static final double kIndexerP = 0.00034;
     public static final double kIndexerI = 0.0;
     public static final double kIndexerD = 0.0;
 
-    public static final double kIndexerS = 0.0;
-    public static final double kIndexerV = 0.0;
+    public static final double kIndexerS = 0.167;
+    public static final double kIndexerV = 0.0017699115044248;
 
     public static final double kIndexMOI = 0.003; // TODO: calc for real MOI
 
@@ -155,9 +156,7 @@ public final class Constants {
     public static final Transform3d kFrontRobotToCam =
         new Transform3d(
             new Translation3d(
-                Units.inchesToMeters(10.72816001),
-                Units.inchesToMeters(9.7311548),
-                Units.inchesToMeters(12.4486466)),
+                Units.inchesToMeters(0), Units.inchesToMeters(0), Units.inchesToMeters(0)),
             new Rotation3d(0, Units.degreesToRadians(15), 0)); // TODO: get real numbers from CAD
 
     // The standard deviations of our vision estimated poses, which affect correction rate
