@@ -151,20 +151,20 @@ public final class Constants {
 
     static {
       kDistanceToRPMMap.put(1.163880614, 1200.0);
-      kDistanceToRPMMap.put(2.011616483, 2110.0);
+      kDistanceToRPMMap.put(2.011616483, 1910.0);
       kDistanceToRPMMap.put(2.828957109, 2700.0);
       kDistanceToRPMMap.put(3.002837776, 3100.0);
-      kDistanceToRPMMap.put(4.019709447, 3500.0);
+      kDistanceToRPMMap.put(4.019709447, 3200.0);
     }
 
     public static InterpolatingDoubleTreeMap kDistanceToBacking = new InterpolatingDoubleTreeMap();
 
     static {
-      kDistanceToBacking.put(1.163880614, 1.7);
+      kDistanceToBacking.put(1.163880614, 1.6);
       kDistanceToBacking.put(2.011616483, 0.9);
       kDistanceToBacking.put(2.828957109, 0.5);
       kDistanceToBacking.put(3.002837776, 0.4);
-      kDistanceToBacking.put(4.019709447, 0.3);
+      kDistanceToBacking.put(4.019709447, 0.35);
     }
   }
 
