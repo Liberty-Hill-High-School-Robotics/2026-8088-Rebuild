@@ -31,7 +31,7 @@ public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = RobotBase.isReal() ? Mode.REAL : simMode;
 
-  public static final double kDriveShootingRatio = 0.5;
+  public static final double kDriveShootingRatio = 0.2;
 
   public static final double kTargetAllowedError = 10;
 
@@ -115,7 +115,7 @@ public final class Constants {
     public static final double kIntakeV = 0.0017699115044248;
 
     // Intake Pivot
-    public static final double kIntakePivotP = 0.002;
+    public static final double kIntakePivotP = 0.0005;
     public static final double kIntakePivotI = 0.000001;
     public static final double kIntakePivotD = 0.0000001;
     // https://docs.revrobotics.com/revlib/spark/closed-loop/feed-forward-control?q=tunning#manually-finding-kcos-and-ks-for-an-arm
@@ -151,19 +151,25 @@ public final class Constants {
 
     static {
       kDistanceToRPMMap.put(1.163880614, 1200.0);
-      kDistanceToRPMMap.put(2.011616483, 1910.0);
-      kDistanceToRPMMap.put(2.828957109, 2700.0);
-      kDistanceToRPMMap.put(3.002837776, 3100.0);
-      kDistanceToRPMMap.put(4.019709447, 3200.0);
+      kDistanceToRPMMap.put(1.720957, 1800.0);
+      kDistanceToRPMMap.put(2.011616483, 1950.0);
+      kDistanceToRPMMap.put(2.437264, 2300.0);
+      kDistanceToRPMMap.put(2.828957109, 2650.0);
+      kDistanceToRPMMap.put(3.002837776, 3000.0);
+      kDistanceToRPMMap.put(3.303899, 3100.0);
+      kDistanceToRPMMap.put(3.343351, 3140.0);
+      kDistanceToRPMMap.put(4.019709447, 3150.0);
     }
 
     public static InterpolatingDoubleTreeMap kDistanceToBacking = new InterpolatingDoubleTreeMap();
 
     static {
       kDistanceToBacking.put(1.163880614, 1.6);
+      kDistanceToBacking.put(1.6316, 1.1);
       kDistanceToBacking.put(2.011616483, 0.9);
-      kDistanceToBacking.put(2.828957109, 0.5);
-      kDistanceToBacking.put(3.002837776, 0.4);
+      kDistanceToBacking.put(2.828957109, 0.55);
+      kDistanceToBacking.put(3.002837776, 0.5);
+      kDistanceToBacking.put(3.343351, 0.45);
       kDistanceToBacking.put(4.019709447, 0.35);
     }
   }
@@ -189,8 +195,8 @@ public final class Constants {
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
-    public static final Matrix<N3, N1> kSideSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
-    public static final Matrix<N3, N1> kSideMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+    public static final Matrix<N3, N1> kSideSingleTagStdDevs = VecBuilder.fill(3.5, 3.5, 8);
+    public static final Matrix<N3, N1> kSideMultiTagStdDevs = VecBuilder.fill(0.3, 0.3, 1);
 
     public static final Transform3d kSideRobotToCam =
         new Transform3d(

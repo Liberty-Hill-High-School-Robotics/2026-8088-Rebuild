@@ -19,6 +19,12 @@
                 "data": {
                   "name": "SpinUpShooter"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PivotOut"
+                }
               }
             ]
           }
@@ -43,12 +49,6 @@
                 "type": "named",
                 "data": {
                   "name": "ShootInHub"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PivotOut"
                 }
               }
             ]

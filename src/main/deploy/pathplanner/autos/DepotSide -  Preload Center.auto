@@ -19,6 +19,12 @@
                 "data": {
                   "name": "SpinUpShooter"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PivotOut"
+                }
               }
             ]
           }
@@ -30,7 +36,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 5.0
+                  "waitTime": 4.0
                 }
               },
               {
@@ -43,12 +49,6 @@
                 "type": "named",
                 "data": {
                   "name": "FixAngle"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PivotOut"
                 }
               }
             ]
