@@ -47,8 +47,8 @@ public class Shooter extends SubsystemBase {
     Logger.recordOutput("Shooter/Front/Setpoint", frontVelocity, "rpm");
     Logger.recordOutput("Shooter/Back/Setpoint", backVelocity, "rpm");
 
-    boolean frontAtSpeed = MathUtil.isNear(frontVelocity, inputs.frontVelocity, 350);
-    boolean backAtSpeed = MathUtil.isNear(backVelocity, inputs.backVelocity, 350);
+    boolean frontAtSpeed = MathUtil.isNear(frontVelocity, inputs.frontVelocity, 150);
+    boolean backAtSpeed = MathUtil.isNear(backVelocity, inputs.backVelocity, 150);
 
     SmartDashboard.putBoolean("Shooter/Front/AtSpeed", frontAtSpeed);
     SmartDashboard.putBoolean("Shooter/Back/AtSpeed", backAtSpeed);

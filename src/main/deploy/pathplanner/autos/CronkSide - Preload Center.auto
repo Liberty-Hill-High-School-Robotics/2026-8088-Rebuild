@@ -84,9 +84,28 @@
                 }
               },
               {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SpinUpShooter"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
                 "type": "named",
                 "data": {
-                  "name": "SpinUpShooter"
+                  "name": "IntakeIn"
                 }
               }
             ]

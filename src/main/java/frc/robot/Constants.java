@@ -115,7 +115,7 @@ public final class Constants {
     public static final double kIntakeV = 0.0017699115044248;
 
     // Intake Pivot
-    public static final double kIntakePivotP = 0.0005;
+    public static final double kIntakePivotP = 0.0002;
     public static final double kIntakePivotI = 0.000001;
     public static final double kIntakePivotD = 0.0000001;
     // https://docs.revrobotics.com/revlib/spark/closed-loop/feed-forward-control?q=tunning#manually-finding-kcos-and-ks-for-an-arm

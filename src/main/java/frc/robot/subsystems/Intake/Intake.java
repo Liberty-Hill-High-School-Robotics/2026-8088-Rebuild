@@ -2,7 +2,6 @@ package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.MotorSpeeds;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
@@ -55,12 +54,12 @@ public class Intake extends SubsystemBase {
   // Should include run/stop/run back, etc.
   public void pivotIn() {
     io.intakePivotIn();
-    setpoint = -MotorSpeeds.kIntakePivotSpeed;
+    setpoint = Constants.kIntakePiviotRetractedLim;
   }
 
   public void pivotOut() {
     io.intakePivotOut();
-    setpoint = MotorSpeeds.kIntakePivotSpeed;
+    setpoint = Constants.kIntakePiviotExtendedLim;
   }
 
   public void pivotStop() {
