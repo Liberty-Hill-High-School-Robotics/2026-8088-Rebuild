@@ -10,14 +10,20 @@ import org.littletonrobotics.junction.Logger;
 public class Shooter extends SubsystemBase {
   private final ShooterIO io;
   private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+
+  private java.util.function.Supplier<edu.wpi.first.math.geometry.Pose2d> poseSupplier;
+  private boolean isSpinUp = false;
+
   private double frontVelocity = 0;
   private double backVelocity = 0;
 
   private double testingPoint = 3000;
   private double testBackingRatio = .3;
 
-  public Shooter(ShooterIO io) {
+  public Shooter(
+      ShooterIO io, java.util.function.Supplier<edu.wpi.first.math.geometry.Pose2d> poseSupplier) {
     this.io = io;
+    this.poseSupplier = poseSupplier;
 
     // Switch constants based on mode (the physics simulator is treated as a
     // separate robot with different tuning)
@@ -47,8 +53,8 @@ public class Shooter extends SubsystemBase {
     Logger.recordOutput("Shooter/Front/Setpoint", frontVelocity, "rpm");
     Logger.recordOutput("Shooter/Back/Setpoint", backVelocity, "rpm");
 
-    boolean frontAtSpeed = MathUtil.isNear(frontVelocity, inputs.frontVelocity, 150);
-    boolean backAtSpeed = MathUtil.isNear(backVelocity, inputs.backVelocity, 150);
+    boolean frontAtSpeed = MathUtil.isNear(frontVelocity, inputs.frontVelocity, 75);
+    boolean backAtSpeed = MathUtil.isNear(backVelocity, inputs.backVelocity, 75);
 
     SmartDashboard.putBoolean("Shooter/Front/AtSpeed", frontAtSpeed);
     SmartDashboard.putBoolean("Shooter/Back/AtSpeed", backAtSpeed);
@@ -66,19 +72,6 @@ public class Shooter extends SubsystemBase {
 
   public void shootFromDistance() {
     double distance = SmartDashboard.getNumber("Distance to Target Hub", 0);
-    /*
-    frontVelocity =
-        179.836
-            + (595.497 * distance)
-            + (264.868
-                * Math.pow(distance, 2)); // TODO: equation to convert from distance to shooter RPM
-    double backingRatio =
-        4.5667
-            - (2.51262 * distance)
-            + (0.332342
-                * Math.pow(
-                    distance, 2)); // TODO: equation to convert fron distance to backing ratio
-                    */
     frontVelocity = MotorSpeeds.kDistanceToRPMMap.get(distance);
     double backingRatio = MotorSpeeds.kDistanceToBacking.get(distance);
     backVelocity = frontVelocity * backingRatio;
@@ -89,22 +82,25 @@ public class Shooter extends SubsystemBase {
     io.setVelocity(frontVelocity, backVelocity);
   }
 
-  public void shootFromDistanceAirMail() {
-    double distance = SmartDashboard.getNumber("Distance to Target Air Mail", 0);
-    /*frontVelocity =
-        555.952
-            + (384.884 * distance)
-            + (558.952
-                * Math.pow(distance, 2)); // TODO: equation to convert from distance to shooter RPM
-    double backingRatio =
-        3.35759
-            - (1.7022 * distance)
-            + (0.238865
-                * Math.pow(
-                    distance, 2)); // TODO: equation to convert fron distance to backing ratio
-                    */
+  public void rampToVelocitySlow() {
+    double distance = SmartDashboard.getNumber("Distance to Target Hub", 0);
     frontVelocity = MotorSpeeds.kDistanceToRPMMap.get(distance);
     double backingRatio = MotorSpeeds.kDistanceToBacking.get(distance);
+    backVelocity = frontVelocity * backingRatio;
+
+    frontVelocity += 5;
+    backVelocity += 5;
+
+    frontVelocity = MathUtil.clamp(frontVelocity, -6705, 6705);
+    backVelocity = MathUtil.clamp(backVelocity, -6705, 6705);
+
+    io.rampToVelocitySlow(frontVelocity, backVelocity);
+  }
+
+  public void shootFromDistanceAirMail() {
+    double distance = SmartDashboard.getNumber("Distance to Target Air Mail", 0);
+    frontVelocity = MotorSpeeds.kDistanceToRPMMapMail.get(distance);
+    double backingRatio = MotorSpeeds.kDistanceToBackingMail.get(distance);
     backVelocity = frontVelocity * backingRatio;
 
     frontVelocity = MathUtil.clamp(frontVelocity, -6700, 6700);
@@ -127,6 +123,18 @@ public class Shooter extends SubsystemBase {
 
   public void changeTestBackingRatio(double amount) {
     testBackingRatio += amount;
+  }
+
+  public void setIsSpinup(boolean doSpinup) {
+    isSpinUp = doSpinup;
+  }
+
+  public boolean getIsSpinup() {
+    return isSpinUp;
+  }
+
+  public double[] getVelocities() {
+    return new double[] {inputs.frontVelocity, inputs.backVelocity};
   }
 
   /** Stops the flywheel. */

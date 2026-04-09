@@ -74,6 +74,13 @@ public class ShooterIOSim implements ShooterIO {
   }
 
   @Override
+  public void rampToVelocitySlow(double velocity, double backingVelocity) {
+    closedLoop = true;
+    frontPid.setSetpoint(MotorSpeeds.kFrontLimiter.calculate(velocity));
+    backPid.setSetpoint(MotorSpeeds.kBackLimiter.calculate(backingVelocity));
+  }
+
+  @Override
   public void stop() {
     closedLoop = false;
     frontAppliedVolts = 0.0;

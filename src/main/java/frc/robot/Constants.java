@@ -11,6 +11,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -88,18 +89,18 @@ public final class Constants {
 
     // Shooter Front
     public static final double kShooterFrontP = 0.00034;
-    public static final double kShooterFrontI = 0.0000001;
-    public static final double kShooterFrontD = 0.0;
+    public static final double kShooterFrontI = 0.0;
+    public static final double kShooterFrontD = 0.0001;
 
-    public static final double kShooterFrontS = 0.173;
+    public static final double kShooterFrontS = 0;
     public static final double kShooterFrontV = 0.0017699115044248;
 
     // Shooter Back
     public static final double kShooterBackP = 0.0003;
-    public static final double kShooterBackI = 0.0000001;
-    public static final double kShooterBackD = 0.0;
+    public static final double kShooterBackI = 0.0;
+    public static final double kShooterBackD = 0.0001;
 
-    public static final double kShooterBackS = 0.151;
+    public static final double kShooterBackS = 0;
     public static final double kShooterBackV = 0.0017699115044248;
 
     // Shooter MOI For SIM
@@ -107,11 +108,11 @@ public final class Constants {
     public static final double shooterBackMOI = 0.003; // TODO: calc for real MOI
 
     // Intake
-    public static final double kIntakeP = 0.0012;
-    public static final double kIntakeI = 0.0;
+    public static final double kIntakeP = 0.0002;
+    public static final double kIntakeI = 0.00001;
     public static final double kIntakeD = 0.0;
 
-    public static final double kIntakeS = 0.213;
+    public static final double kIntakeS = 0.0;
     public static final double kIntakeV = 0.0017699115044248;
 
     // Intake Pivot
@@ -145,33 +146,76 @@ public final class Constants {
 
     public static final double kIndexMOI = 0.003; // TODO: calc for real MOI
 
-    public static final double kIndexSpeed = 3000.0; // speed to run index motor RPM
+    public static final double kIndexSpeed = 500.0; // speed to run index motor RPM
 
     public static InterpolatingDoubleTreeMap kDistanceToRPMMap = new InterpolatingDoubleTreeMap();
 
     static {
-      kDistanceToRPMMap.put(1.163880614, 1200.0);
-      kDistanceToRPMMap.put(1.720957, 1800.0);
-      kDistanceToRPMMap.put(2.011616483, 1950.0);
-      kDistanceToRPMMap.put(2.437264, 2300.0);
-      kDistanceToRPMMap.put(2.828957109, 2650.0);
+      kDistanceToRPMMap.put(1.163880614, 1300.0);
+      kDistanceToRPMMap.put(1.720957, 1900.0);
+      kDistanceToRPMMap.put(2.011616483, 2050.0);
+      kDistanceToRPMMap.put(2.437264, 2400.0);
+      kDistanceToRPMMap.put(2.828957109, 2800.0);
       kDistanceToRPMMap.put(3.002837776, 3000.0);
-      kDistanceToRPMMap.put(3.303899, 3100.0);
-      kDistanceToRPMMap.put(3.343351, 3140.0);
-      kDistanceToRPMMap.put(4.019709447, 3150.0);
+      kDistanceToRPMMap.put(3.303899, 3090.0);
+      kDistanceToRPMMap.put(3.343351, 3100.0);
+      kDistanceToRPMMap.put(3.689604834497496, 3450.0);
+      kDistanceToRPMMap.put(4.019709447, 3900.0);
     }
 
     public static InterpolatingDoubleTreeMap kDistanceToBacking = new InterpolatingDoubleTreeMap();
 
     static {
       kDistanceToBacking.put(1.163880614, 1.6);
-      kDistanceToBacking.put(1.6316, 1.1);
+      kDistanceToBacking.put(1.720957, 1.0);
       kDistanceToBacking.put(2.011616483, 0.9);
-      kDistanceToBacking.put(2.828957109, 0.55);
-      kDistanceToBacking.put(3.002837776, 0.5);
-      kDistanceToBacking.put(3.343351, 0.45);
+      kDistanceToBacking.put(2.437264, 0.65);
+      kDistanceToBacking.put(2.828957109, 0.56);
+      kDistanceToBacking.put(3.002837776, 0.55);
+      kDistanceToBacking.put(3.303899, 0.54);
+      kDistanceToBacking.put(3.343351, 0.51);
+      kDistanceToBacking.put(3.689604834497496, .4);
       kDistanceToBacking.put(4.019709447, 0.35);
     }
+
+    public static InterpolatingDoubleTreeMap kDistanceToRPMMapMail =
+        new InterpolatingDoubleTreeMap();
+
+    static {
+      kDistanceToRPMMapMail.put(1.163880614, 2000.0);
+      kDistanceToRPMMapMail.put(1.720957, 2400.0);
+      kDistanceToRPMMapMail.put(2.011616483, 2600.0);
+      kDistanceToRPMMapMail.put(2.437264, 3000.0);
+      kDistanceToRPMMapMail.put(2.828957109, 3200.0);
+      kDistanceToRPMMapMail.put(3.002837776, 3400.0);
+      kDistanceToRPMMapMail.put(3.303899, 3600.0);
+      kDistanceToRPMMapMail.put(3.343351, 3700.0);
+      kDistanceToRPMMapMail.put(4.019709447, 4100.0);
+      kDistanceToRPMMapMail.put(6.0, 4500.0);
+      kDistanceToRPMMapMail.put(8.0, 5000.0);
+      kDistanceToRPMMapMail.put(10.714630449757905, 6000.0);
+    }
+
+    public static InterpolatingDoubleTreeMap kDistanceToBackingMail =
+        new InterpolatingDoubleTreeMap();
+
+    static {
+      kDistanceToBackingMail.put(1.163880614, 1.0);
+      kDistanceToBackingMail.put(1.6316, .8);
+      kDistanceToBackingMail.put(2.011616483, 0.7);
+      kDistanceToBackingMail.put(2.828957109, 0.3);
+      kDistanceToBackingMail.put(3.002837776, 0.25);
+      kDistanceToBackingMail.put(3.343351, 0.2);
+      kDistanceToBackingMail.put(4.019709447, 0.15);
+      kDistanceToBackingMail.put(6.0, 0.12);
+      kDistanceToBackingMail.put(8.0, 0.11);
+      kDistanceToBackingMail.put(10.714630449757905, 0.1);
+    }
+
+    public static final SlewRateLimiter kFrontLimiter =
+        new SlewRateLimiter(500); // 500 rpm/s acceleration limit
+    public static final SlewRateLimiter kBackLimiter =
+        new SlewRateLimiter(500); // 500 rpm/s acceleration limit
   }
 
   public static final class OIConstants {

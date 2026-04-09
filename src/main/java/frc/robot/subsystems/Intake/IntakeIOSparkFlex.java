@@ -60,7 +60,7 @@ public class IntakeIOSparkFlex implements IntakeIO {
     SparkFlexConfig intakeConfig = new SparkFlexConfig();
     intakeConfig
         .inverted(true)
-        .smartCurrentLimit(60)
+        .smartCurrentLimit(40)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(MotorSpeeds.kIntakeP)
@@ -84,6 +84,7 @@ public class IntakeIOSparkFlex implements IntakeIO {
   @Override
   public void updateInputs(IntakeIOInputs inputs) {
     inputs.intakePositionRad = intakePivotEncoder.getPosition();
+    inputs.intakePivotVelocity = intakePivotEncoder.getVelocity();
     inputs.intakePivotAppliedVolts =
         intakePivotMotor.getAppliedOutput() * RobotController.getBatteryVoltage();
     inputs.intakePivotCurrentAmps = intakePivotMotor.getOutputCurrent();

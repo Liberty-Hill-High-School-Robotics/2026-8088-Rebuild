@@ -30,6 +30,8 @@ import frc.robot.commands.Intake.IntakeIn;
 import frc.robot.commands.ShootInHub;
 import frc.robot.commands.Shooter.ChangeTestingBackingRatio;
 import frc.robot.commands.Shooter.ChangeTestingSpeed;
+import frc.robot.commands.Shooter.RampToVelocitySlow;
+import frc.robot.commands.Shooter.SetIsSpinup;
 import frc.robot.commands.Shooter.ShootAtSpeed;
 import frc.robot.commands.Shooter.ShootAtTestingSpeed;
 import frc.robot.subsystems.Indexer.Indexer;
@@ -90,7 +92,7 @@ public class RobotContainer {
                 new ModuleIOSpark(2),
                 new ModuleIOSpark(3));
         m_intake = new Intake(new IntakeIOSparkFlex());
-        m_shooter = new Shooter(new ShooterIOSparkFlex());
+        m_shooter = new Shooter(new ShooterIOSparkFlex(), () -> m_drive.getPose());
         m_vision = new Vision(m_drive::addVisionMeasurement);
         m_indexer = new Indexer(new IndexerIOSparkFlex());
         break;
@@ -105,7 +107,7 @@ public class RobotContainer {
                 new ModuleIOSim(),
                 new ModuleIOSim());
         m_intake = new Intake(new IntakeIOSim());
-        m_shooter = new Shooter(new ShooterIOSim());
+        m_shooter = new Shooter(new ShooterIOSim(), () -> m_drive.getPose());
         m_vision = new Vision(m_drive::addVisionMeasurement); // TODO: update vision for sim
         m_indexer = new Indexer(new IndexerIOSim());
         break;
@@ -120,7 +122,7 @@ public class RobotContainer {
                 new ModuleIO() {},
                 new ModuleIO() {});
         m_intake = new Intake(new IntakeIO() {});
-        m_shooter = new Shooter(new ShooterIO() {});
+        m_shooter = new Shooter(new ShooterIO() {}, () -> new Pose2d());
         m_vision = new Vision(m_drive::addVisionMeasurement);
         m_indexer = new Indexer(new IndexerIO() {});
         break;
@@ -196,6 +198,8 @@ public class RobotContainer {
             () -> -m_driverController.getRawAxis(1),
             () -> -m_driverController.getRawAxis(0),
             () -> -m_driverController.getRawAxis(4)));
+
+    m_shooter.setDefaultCommand(new RampToVelocitySlow(m_shooter, () -> m_drive.getPose()));
 
     // Lock to 0° when Y button is held
     final Trigger JoystickDriveAtZero = m_driverController.button(4);
@@ -302,6 +306,12 @@ public class RobotContainer {
     final Trigger Eject = m_operatorController.button(4);
     Eject.whileTrue(new Eject(m_intake));
     Eject.whileTrue(new IndexerEject(m_indexer));
+
+    final Trigger EnableSpinup = m_operatorController.button(8);
+    EnableSpinup.whileTrue(new SetIsSpinup(m_shooter, true));
+
+    final Trigger DisableSpinup = m_operatorController.button(7);
+    DisableSpinup.whileTrue(new SetIsSpinup(m_shooter, false));
   }
 
   /**

@@ -20,6 +20,9 @@ public interface ShooterIO {
   // Spin the shooter rollers at a specified rpm
   public default void setVelocity(double velocity, double backingVelocity) {}
 
+  // Bring the shooter up to a specified velocity more gradually
+  public default void rampToVelocitySlow(double velocity, double backingVelocity) {}
+
   // Stop ther shooter motors
   public default void stop() {}
 }

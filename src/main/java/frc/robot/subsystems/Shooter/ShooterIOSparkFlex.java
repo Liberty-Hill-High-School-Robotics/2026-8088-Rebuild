@@ -142,6 +142,15 @@ public class ShooterIOSparkFlex implements ShooterIO {
     shooterBackController.setSetpoint(backingVelocity, ControlType.kVelocity);
   }
 
+  // Bring the shooter up to a specified velocity more gradually
+  @Override
+  public void rampToVelocitySlow(double velocity, double backingVelocity) {
+    shooterFrontController.setSetpoint(
+        MotorSpeeds.kFrontLimiter.calculate(velocity), ControlType.kVelocity);
+    shooterBackController.setSetpoint(
+        MotorSpeeds.kBackLimiter.calculate(backingVelocity), ControlType.kVelocity);
+  }
+
   // Stop ther shooter motors
   @Override
   public void stop() {

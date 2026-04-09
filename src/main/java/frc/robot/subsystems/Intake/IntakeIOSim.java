@@ -1,7 +1,6 @@
 package frc.robot.subsystems.Intake;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -11,16 +10,15 @@ import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorSpeeds;
-import org.littletonrobotics.junction.Logger;
 
 public class IntakeIOSim implements IntakeIO {
   private final SingleJointedArmSim intakePivotSim =
       new SingleJointedArmSim(
           LinearSystemId.createSingleJointedArmSystem(
-              DCMotor.getNeoVortex(1), MotorSpeeds.kIntakePivotMOI, 1),
+              DCMotor.getNeoVortex(1), MotorSpeeds.kIntakePivotMOI, 32),
           DCMotor.getNeoVortex(1),
-          1.0,
-          Units.inchesToMeters(14.0),
+          1,
+          Units.inchesToMeters(12.0),
           Units.degreesToRadians(0.0),
           Units.degreesToRadians(200.0),
           true,
@@ -36,7 +34,8 @@ public class IntakeIOSim implements IntakeIO {
   private PIDController intakePivotController = new PIDController(.001, 0.0, 0.0);
   private PIDController intakeController = new PIDController(0.02, 0, 0.0);
 
-  private ArmFeedforward intakePivotFF = new ArmFeedforward(0.0, 1.377, 0.0017699115044248);
+  private SimpleMotorFeedforward intakePivotFF =
+      new SimpleMotorFeedforward(0.0, 0.0017699115044248);
   private SimpleMotorFeedforward intakeFF = new SimpleMotorFeedforward(0.0, 0.0017699115044248);
 
   private boolean intakePivotClosedLoop = false;
@@ -49,9 +48,12 @@ public class IntakeIOSim implements IntakeIO {
     if (intakePivotClosedLoop) {
       intakePivotAppliedVolts =
           MathUtil.clamp(
-              intakePivotController.calculate(intakePivotSim.getAngleRads())
+              intakePivotController.calculate(
+                      Units.radiansPerSecondToRotationsPerMinute(
+                          intakePivotSim.getVelocityRadPerSec()))
                   + intakePivotFF.calculate(
-                      intakePivotSim.getAngleRads(), 0), // TODO: does not work fix later
+                      Units.radiansPerSecondToRotationsPerMinute(
+                          intakePivotSim.getVelocityRadPerSec())),
               -12.0,
               12.0);
       intakePivotSim.setInputVoltage(intakePivotAppliedVolts);
@@ -76,6 +78,8 @@ public class IntakeIOSim implements IntakeIO {
     inputs.intakeCurrentAmps = intakeSim.getCurrentDrawAmps();
 
     inputs.intakePositionRad = intakePivotSim.getAngleRads();
+    inputs.intakePivotVelocity =
+        Units.radiansPerSecondToRotationsPerMinute(intakePivotSim.getVelocityRadPerSec());
     inputs.intakePivotAppliedVolts = intakePivotAppliedVolts;
     inputs.intakePivotCurrentAmps = intakePivotSim.getCurrentDrawAmps();
 
@@ -85,18 +89,25 @@ public class IntakeIOSim implements IntakeIO {
   // move the intake to its outward position
   @Override
   public void intakePivotOut() {
-    intakePivotClosedLoop = true;
-    intakePivotController.setSetpoint(Units.rotationsToRadians(Constants.kIntakePiviotExtendedLim));
-    Logger.recordOutput(
-        "Intake/Pivot/Setpoint", Units.rotationsToRadians(Constants.kIntakePiviotExtendedLim));
+    if (Units.radiansToRotations(intakePivotSim.getAngleRads())
+        < Constants.kIntakePiviotExtendedLim) {
+      intakePivotClosedLoop = true;
+      intakePivotController.setSetpoint(MotorSpeeds.kIntakePivotSpeed);
+    } else {
+      intakePiviotStop();
+    }
   }
 
   // move the intake to its inward position
   @Override
   public void intakePivotIn() {
-    intakePivotClosedLoop = true;
-    intakePivotController.setSetpoint(Units.rotationsToRadians(0));
-    Logger.recordOutput("Intake/Pivot/Setpoint", Units.rotationsToRadians(0));
+    if (Units.radiansToRotations(intakePivotSim.getAngleRads())
+        > Constants.kIntakePiviotRetractedLim) {
+      intakePivotClosedLoop = true;
+      intakePivotController.setSetpoint(-MotorSpeeds.kIntakePivotSpeed);
+    } else {
+      intakePiviotStop();
+    }
   }
 
   // stop moving the intake

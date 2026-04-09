@@ -1,7 +1,6 @@
 package frc.robot.commands.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.MotorSpeeds;
 import frc.robot.subsystems.Shooter.Shooter;
 
 /**
@@ -9,22 +8,20 @@ import frc.robot.subsystems.Shooter.Shooter;
  * pedagogical purposes. Actual code should inline a command this simple with {@link
  * edu.wpi.first.wpilibj2.command.InstantCommand}.
  */
-public class ChangeTestingSpeed extends Command {
+public class SetIsSpinup extends Command {
   // The subsystem the command runs on
   private final Shooter m_shooter;
-  private double amount;
+  private boolean doSpinup;
 
-  public ChangeTestingSpeed(Shooter subsystem, double amount) {
+  public SetIsSpinup(Shooter subsystem, boolean doSpinup) {
     m_shooter = subsystem;
-    this.amount = amount;
+    this.doSpinup = doSpinup;
     addRequirements(m_shooter);
   }
 
   @Override
   public void initialize() {
-    m_shooter.changeTestVelocity(amount);
-    MotorSpeeds.kFrontLimiter.reset(m_shooter.getVelocities()[0]);
-    MotorSpeeds.kBackLimiter.reset(m_shooter.getVelocities()[1]);
+    m_shooter.setIsSpinup(doSpinup);
   }
 
   @Override
