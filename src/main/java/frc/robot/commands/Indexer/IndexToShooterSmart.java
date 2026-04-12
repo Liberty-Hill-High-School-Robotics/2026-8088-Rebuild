@@ -11,9 +11,17 @@ import frc.robot.subsystems.Indexer.Indexer;
 public class IndexToShooterSmart extends Command {
   // The subsystem the command runs on
   private final Indexer m_indexer;
+  private boolean isAirmail;
+
+  public IndexToShooterSmart(Indexer subsystem, boolean isAirmail) {
+    m_indexer = subsystem;
+    this.isAirmail = isAirmail;
+    addRequirements(m_indexer);
+  }
 
   public IndexToShooterSmart(Indexer subsystem) {
     m_indexer = subsystem;
+    isAirmail = false;
     addRequirements(m_indexer);
   }
 
@@ -22,7 +30,7 @@ public class IndexToShooterSmart extends Command {
 
   @Override
   public void execute() {
-    m_indexer.indexToShooterSmart();
+    m_indexer.indexToShooterSmart(isAirmail);
   }
 
   @Override

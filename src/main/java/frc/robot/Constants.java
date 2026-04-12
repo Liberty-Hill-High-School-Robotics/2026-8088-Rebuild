@@ -82,25 +82,26 @@ public final class Constants {
     // Climber TODO: no climber yet
     // public static final int kClimbMotor = 18;
     // public static final int kClimbPiviotMotor = 19;
+
   }
 
   // Speeds for motors and PID constants
   public static final class MotorSpeeds {
 
     // Shooter Front
-    public static final double kShooterFrontP = 0.00034;
+    public static final double kShooterFrontP = 0.0001;
     public static final double kShooterFrontI = 0.0;
     public static final double kShooterFrontD = 0.0001;
 
-    public static final double kShooterFrontS = 0;
+    public static final double kShooterFrontS = 0.1;
     public static final double kShooterFrontV = 0.0017699115044248;
 
     // Shooter Back
-    public static final double kShooterBackP = 0.0003;
+    public static final double kShooterBackP = 0.00017;
     public static final double kShooterBackI = 0.0;
     public static final double kShooterBackD = 0.0001;
 
-    public static final double kShooterBackS = 0;
+    public static final double kShooterBackS = 0.1;
     public static final double kShooterBackV = 0.0017699115044248;
 
     // Shooter MOI For SIM
@@ -116,7 +117,7 @@ public final class Constants {
     public static final double kIntakeV = 0.0017699115044248;
 
     // Intake Pivot
-    public static final double kIntakePivotP = 0.0002;
+    public static final double kIntakePivotP = 0.0003;
     public static final double kIntakePivotI = 0.000001;
     public static final double kIntakePivotD = 0.0000001;
     // https://docs.revrobotics.com/revlib/spark/closed-loop/feed-forward-control?q=tunning#manually-finding-kcos-and-ks-for-an-arm
@@ -128,7 +129,7 @@ public final class Constants {
     public static final double kIntakePivotCosRatio = 32.0000;
     */
 
-    public static final double kIntakePivotSpeed = 500.0;
+    public static final double kIntakePivotSpeed = 400.0;
 
     // Intake MOI for SIM
     public static final double kIntakePivotMOI = 0.01; // TODO: calc for real MOI
@@ -232,8 +233,8 @@ public final class Constants {
     public static final Transform3d kFrontRobotToCam =
         new Transform3d(
             new Translation3d(
-                Units.inchesToMeters(0),
                 Units.inchesToMeters(7.11216728),
+                Units.inchesToMeters(0.0),
                 Units.inchesToMeters(11.34720739)),
             new Rotation3d(0, Units.degreesToRadians(15), 0)); // TODO: get real numbers from CAD
 
@@ -244,7 +245,7 @@ public final class Constants {
 
     public static final Transform3d kSideRobotToCam =
         new Transform3d(
-            new Translation3d(0, Units.inchesToMeters(10.25), Units.inchesToMeters(10.5)),
+            new Translation3d(-0.03654359, -0.27975342, 0.29129383),
             new Rotation3d(
                 0,
                 Units.degreesToRadians(15),
@@ -253,8 +254,8 @@ public final class Constants {
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
     public static final Matrix<N3, N1> kFrontSingleTagStdDevs =
-        VecBuilder.fill(5, 5, 10); // lower = more trust in vision
-    public static final Matrix<N3, N1> kFrontMultiTagStdDevs = VecBuilder.fill(1, 1, 2);
+        VecBuilder.fill(4, 4, 10); // lower = more trust in vision
+    public static final Matrix<N3, N1> kFrontMultiTagStdDevs = VecBuilder.fill(0.7, 0.7, 2);
   }
 
   public static final class FieldConstants {

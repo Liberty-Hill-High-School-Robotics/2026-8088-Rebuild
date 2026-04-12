@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.Indexer.IndexToShooterDumb;
+import frc.robot.commands.Indexer.IndexToShooterSmart;
 import frc.robot.commands.Shooter.ShootAtSpeedAirMail;
 import frc.robot.subsystems.Indexer.Indexer;
 import frc.robot.subsystems.Shooter.Shooter;
@@ -15,7 +15,7 @@ public class AirMail extends ParallelCommandGroup {
 
   public AirMail(Indexer m_indexer, Shooter m_shooter) {
     addCommands(
-        new IndexToShooterDumb(m_indexer), // Pass Balls to Shooter skip checks
+        new IndexToShooterSmart(m_indexer, true), // Pass Balls to Shooter
         new ShootAtSpeedAirMail(m_shooter)); // spin up shooter
   }
 

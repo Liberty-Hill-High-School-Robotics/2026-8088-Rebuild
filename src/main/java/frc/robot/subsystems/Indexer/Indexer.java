@@ -47,17 +47,31 @@ public class Indexer extends SubsystemBase {
   // here. Call these from Commands.
   // Should include run/stop/run back, etc.
 
-  public void indexToShooterSmart() {
-    if (SmartDashboard.getBoolean("Drive On Target Hub", true)) {
-      if (SmartDashboard.getBoolean("Shooter/Front/AtSpeed", true)
-          && SmartDashboard.getBoolean("Shooter/Back/AtSpeed", true)) {
-        io.setVelocity(MotorSpeeds.kIndexSpeed);
-        setpoint = MotorSpeeds.kIndexSpeed;
+  public void indexToShooterSmart(boolean isAirmail) {
+    if (isAirmail) {
+      if (SmartDashboard.getBoolean("Drive On Target Mail", true)) {
+        if (SmartDashboard.getBoolean("Shooter/Front/AtSpeed", true)
+            && SmartDashboard.getBoolean("Shooter/Back/AtSpeed", true)) {
+          io.setVelocity(MotorSpeeds.kIndexSpeed);
+          setpoint = MotorSpeeds.kIndexSpeed;
+        } else {
+          indexStop();
+        }
       } else {
         indexStop();
       }
     } else {
-      indexStop();
+      if (SmartDashboard.getBoolean("Drive On Target Hub", true)) {
+        if (SmartDashboard.getBoolean("Shooter/Front/AtSpeed", true)
+            && SmartDashboard.getBoolean("Shooter/Back/AtSpeed", true)) {
+          io.setVelocity(MotorSpeeds.kIndexSpeed);
+          setpoint = MotorSpeeds.kIndexSpeed;
+        } else {
+          indexStop();
+        }
+      } else {
+        indexStop();
+      }
     }
   }
 

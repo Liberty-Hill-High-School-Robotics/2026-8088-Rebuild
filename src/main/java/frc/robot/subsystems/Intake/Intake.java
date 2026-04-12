@@ -1,14 +1,17 @@
 package frc.robot.subsystems.Intake;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.MotorSpeeds;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
   private final IntakeIO io;
   private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
   private boolean isExtended = false;
-  private double setpoint = 0;
+  private double pivotSetpoint = 0;
+  private double intakeSetpoint = 0;
 
   public Intake(IntakeIO io) {
     this.io = io;
@@ -39,8 +42,11 @@ public class Intake extends SubsystemBase {
     } else {
       pivotIn();
     }
-    Logger.recordOutput("Intake/PivotSetpoint", setpoint);
+    Logger.recordOutput("Intake/PivotSetpoint", pivotSetpoint);
     Logger.recordOutput("Intake/IsExtended", isExtended);
+
+    Logger.recordOutput("Intake/IntakeSetpoint", intakeSetpoint);
+    Logger.recordOutput("Intake/isIntakeJammed", getIsIntakeJammed());
   }
 
   @Override
@@ -54,12 +60,12 @@ public class Intake extends SubsystemBase {
   // Should include run/stop/run back, etc.
   public void pivotIn() {
     io.intakePivotIn();
-    setpoint = Constants.kIntakePiviotRetractedLim;
+    pivotSetpoint = Constants.kIntakePiviotRetractedLim;
   }
 
   public void pivotOut() {
     io.intakePivotOut();
-    setpoint = Constants.kIntakePiviotExtendedLim;
+    pivotSetpoint = Constants.kIntakePiviotExtendedLim;
   }
 
   public void pivotStop() {
@@ -72,13 +78,19 @@ public class Intake extends SubsystemBase {
 
   public void intakeIn() {
     io.intakeIn();
+    intakeSetpoint = MotorSpeeds.kIntakeSpeed;
   }
 
   public void eject() {
     io.eject();
+    intakeSetpoint = -MotorSpeeds.kIntakeSpeed;
   }
 
   public void intakeStop() {
     io.intakeStop();
+  }
+
+  public boolean getIsIntakeJammed() {
+    return !MathUtil.isNear(intakeSetpoint, inputs.intakeVelocity, 500);
   }
 }

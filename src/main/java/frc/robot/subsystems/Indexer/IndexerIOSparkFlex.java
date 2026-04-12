@@ -33,7 +33,7 @@ public class IndexerIOSparkFlex implements IndexerIO {
     // Config Leader
     SparkFlexConfig indexLeadConfig = new SparkFlexConfig();
     indexLeadConfig
-        .smartCurrentLimit(35)
+        .smartCurrentLimit(60)
         .inverted(true)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
@@ -59,7 +59,7 @@ public class IndexerIOSparkFlex implements IndexerIO {
 
     // Config Follower
     SparkFlexConfig indexFollowConfig = new SparkFlexConfig();
-    indexFollowConfig.smartCurrentLimit(35);
+    indexFollowConfig.smartCurrentLimit(60);
     indexFollowConfig.follow(indexLeadMotor, true);
 
     tryUntilOk(
