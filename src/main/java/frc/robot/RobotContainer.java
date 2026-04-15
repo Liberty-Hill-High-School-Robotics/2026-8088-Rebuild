@@ -21,8 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AirMail;
+import frc.robot.commands.DetectAndIntake;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.Indexer.IndexToShooterSmart;
 import frc.robot.commands.Indexer.IndexerEject;
 import frc.robot.commands.Intake.ChangeIsExtended;
 import frc.robot.commands.Intake.Eject;
@@ -33,7 +33,6 @@ import frc.robot.commands.Shooter.ChangeTestingSpeed;
 import frc.robot.commands.Shooter.RampToVelocitySlow;
 import frc.robot.commands.Shooter.SetIsSpinup;
 import frc.robot.commands.Shooter.ShootAtSpeed;
-import frc.robot.commands.Shooter.ShootAtTestingSpeed;
 import frc.robot.subsystems.Indexer.Indexer;
 import frc.robot.subsystems.Indexer.IndexerIO;
 import frc.robot.subsystems.Indexer.IndexerIOSim;
@@ -53,6 +52,7 @@ import frc.robot.subsystems.drive.GyroIOPigeon2;
 import frc.robot.subsystems.drive.ModuleIO;
 import frc.robot.subsystems.drive.ModuleIOSim;
 import frc.robot.subsystems.drive.ModuleIOSpark;
+import frc.robot.util.Elastic;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /**
@@ -225,25 +225,50 @@ public class RobotContainer {
             .ignoringDisable(true));
 
     // Lock to 45° when left trigger is held, for use when crossing the trench
-    final Trigger DriveCrossTrench = m_driverController.axisGreaterThan(2, .1);
-    DriveCrossTrench.whileTrue(
-        DriveCommands.joystickDriveAtAngle(
+        final Trigger DriveCrossTrench = m_driverController.axisGreaterThan(2, .1);
+        DriveCrossTrench.whileTrue(
+            DriveCommands.joystickDriveAtAngle(
+                m_drive,
+                () -> -m_driverController.getRawAxis(1),
+                () -> -m_driverController.getRawAxis(0),
+                () -> m_drive.getClosestTrenchAngle()));
+                
+    final Trigger DetectAndIntake = m_driverController.axisGreaterThan(3, .1);
+    DetectAndIntake.whileTrue(
+        new DetectAndIntake(
             m_drive,
-            () -> -m_driverController.getRawAxis(1),
-            () -> -m_driverController.getRawAxis(0),
-            () -> Rotation2d.fromDegrees(45)));
+            /*m_intake,
+            m_indexer,
+            */
+            () -> m_vision.getOBJYaw(),
+            () -> (-m_driverController.getRawAxis(3)) / 3));
 
+    final Trigger SwitchToTeleTab = m_driverController.button(5);
+    SwitchToTeleTab.onTrue(Commands.runOnce(() -> Elastic.selectTab(0)).ignoringDisable(true));
+
+    final Trigger SwitchToCamTab = m_driverController.button(6);
+    SwitchToCamTab.onTrue(Commands.runOnce(() -> Elastic.selectTab(1)).ignoringDisable(true));
+
+    final Trigger CameraDrive = m_driverController.button(1);
+    CameraDrive.toggleOnTrue(
+        DriveCommands.joystickDriveRobot(
+            m_drive,
+            () -> m_driverController.getRawAxis(1),
+            () -> m_driverController.getRawAxis(0),
+            () -> -m_driverController.getRawAxis(4)));
+
+    /*
     final Trigger ShootAtTestingSpeed = m_driverController.button(1);
     ShootAtTestingSpeed.whileTrue(new ShootAtTestingSpeed(m_shooter));
-    ShootAtTestingSpeed.whileTrue(new IndexToShooterSmart(m_indexer));
+    ShootAtTestingSpeed.whileTrue(new IndexToShooterSmart(m_indexer, true));
     ShootAtTestingSpeed.whileTrue(
         DriveCommands.joystickDriveAtAngle(
             m_drive,
             () -> -m_driverController.getRawAxis(1) * Constants.kDriveShootingRatio,
             () -> -m_driverController.getRawAxis(0) * Constants.kDriveShootingRatio,
             () ->
-                Rotation2d.fromDegrees(SmartDashboard.getNumber("Robot Angle to Target Hub", 0))));
-
+                Rotation2d.fromDegrees(
+                    SmartDashboard.getNumber("Robot Angle to Target Air Mail", 0))));
     final Trigger IncreaseTestingPoint = m_driverController.povUp();
     IncreaseTestingPoint.whileTrue(new ChangeTestingSpeed(m_shooter, 100));
 
@@ -267,6 +292,7 @@ public class RobotContainer {
 
     final Trigger DecreaseBackingRatioSmall = m_driverController.button(7);
     DecreaseBackingRatioSmall.whileTrue(new ChangeTestingBackingRatio(m_shooter, -.01));
+    */
 
     final Trigger ShootInHub = m_operatorController.axisGreaterThan(3, .1);
     ShootInHub.whileTrue(new ShootInHub(m_indexer, m_shooter));

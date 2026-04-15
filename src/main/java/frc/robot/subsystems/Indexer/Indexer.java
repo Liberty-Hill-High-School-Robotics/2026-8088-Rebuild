@@ -49,7 +49,7 @@ public class Indexer extends SubsystemBase {
 
   public void indexToShooterSmart(boolean isAirmail) {
     if (isAirmail) {
-      if (SmartDashboard.getBoolean("Drive On Target Mail", true)) {
+      if (true || SmartDashboard.getBoolean("Drive On Target Mail", true)) { // skip check
         if (SmartDashboard.getBoolean("Shooter/Front/AtSpeed", true)
             && SmartDashboard.getBoolean("Shooter/Back/AtSpeed", true)) {
           io.setVelocity(MotorSpeeds.kIndexSpeed);

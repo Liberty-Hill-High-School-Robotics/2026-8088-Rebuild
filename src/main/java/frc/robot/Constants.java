@@ -17,7 +17,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.interpolation.InterpolatingDoubleTreeMap;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -149,70 +148,6 @@ public final class Constants {
 
     public static final double kIndexSpeed = 500.0; // speed to run index motor RPM
 
-    public static InterpolatingDoubleTreeMap kDistanceToRPMMap = new InterpolatingDoubleTreeMap();
-
-    static {
-      kDistanceToRPMMap.put(1.163880614, 1300.0);
-      kDistanceToRPMMap.put(1.720957, 1900.0);
-      kDistanceToRPMMap.put(2.011616483, 2050.0);
-      kDistanceToRPMMap.put(2.437264, 2400.0);
-      kDistanceToRPMMap.put(2.828957109, 2800.0);
-      kDistanceToRPMMap.put(3.002837776, 3000.0);
-      kDistanceToRPMMap.put(3.303899, 3090.0);
-      kDistanceToRPMMap.put(3.343351, 3100.0);
-      kDistanceToRPMMap.put(3.689604834497496, 3450.0);
-      kDistanceToRPMMap.put(4.019709447, 3900.0);
-    }
-
-    public static InterpolatingDoubleTreeMap kDistanceToBacking = new InterpolatingDoubleTreeMap();
-
-    static {
-      kDistanceToBacking.put(1.163880614, 1.6);
-      kDistanceToBacking.put(1.720957, 1.0);
-      kDistanceToBacking.put(2.011616483, 0.9);
-      kDistanceToBacking.put(2.437264, 0.65);
-      kDistanceToBacking.put(2.828957109, 0.56);
-      kDistanceToBacking.put(3.002837776, 0.55);
-      kDistanceToBacking.put(3.303899, 0.54);
-      kDistanceToBacking.put(3.343351, 0.51);
-      kDistanceToBacking.put(3.689604834497496, .4);
-      kDistanceToBacking.put(4.019709447, 0.35);
-    }
-
-    public static InterpolatingDoubleTreeMap kDistanceToRPMMapMail =
-        new InterpolatingDoubleTreeMap();
-
-    static {
-      kDistanceToRPMMapMail.put(1.163880614, 2000.0);
-      kDistanceToRPMMapMail.put(1.720957, 2400.0);
-      kDistanceToRPMMapMail.put(2.011616483, 2600.0);
-      kDistanceToRPMMapMail.put(2.437264, 3000.0);
-      kDistanceToRPMMapMail.put(2.828957109, 3200.0);
-      kDistanceToRPMMapMail.put(3.002837776, 3400.0);
-      kDistanceToRPMMapMail.put(3.303899, 3600.0);
-      kDistanceToRPMMapMail.put(3.343351, 3700.0);
-      kDistanceToRPMMapMail.put(4.019709447, 4100.0);
-      kDistanceToRPMMapMail.put(6.0, 4500.0);
-      kDistanceToRPMMapMail.put(8.0, 5000.0);
-      kDistanceToRPMMapMail.put(10.714630449757905, 6000.0);
-    }
-
-    public static InterpolatingDoubleTreeMap kDistanceToBackingMail =
-        new InterpolatingDoubleTreeMap();
-
-    static {
-      kDistanceToBackingMail.put(1.163880614, 1.0);
-      kDistanceToBackingMail.put(1.6316, .8);
-      kDistanceToBackingMail.put(2.011616483, 0.7);
-      kDistanceToBackingMail.put(2.828957109, 0.3);
-      kDistanceToBackingMail.put(3.002837776, 0.25);
-      kDistanceToBackingMail.put(3.343351, 0.2);
-      kDistanceToBackingMail.put(4.019709447, 0.15);
-      kDistanceToBackingMail.put(6.0, 0.12);
-      kDistanceToBackingMail.put(8.0, 0.11);
-      kDistanceToBackingMail.put(10.714630449757905, 0.1);
-    }
-
     public static final SlewRateLimiter kFrontLimiter =
         new SlewRateLimiter(500); // 500 rpm/s acceleration limit
     public static final SlewRateLimiter kBackLimiter =
@@ -236,7 +171,7 @@ public final class Constants {
                 Units.inchesToMeters(7.11216728),
                 Units.inchesToMeters(0.0),
                 Units.inchesToMeters(11.34720739)),
-            new Rotation3d(0, Units.degreesToRadians(15), 0)); // TODO: get real numbers from CAD
+            new Rotation3d(0, Units.degreesToRadians(15), 0));
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
@@ -246,16 +181,16 @@ public final class Constants {
     public static final Transform3d kSideRobotToCam =
         new Transform3d(
             new Translation3d(-0.03654359, -0.27975342, 0.29129383),
-            new Rotation3d(
-                0,
-                Units.degreesToRadians(15),
-                Units.degreesToRadians(-90))); // TODO: get real numbers from CAD
+            new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(-90)));
 
     // The standard deviations of our vision estimated poses, which affect correction rate
     // (Fake values. Experiment and determine estimation noise on an actual robot.)
     public static final Matrix<N3, N1> kFrontSingleTagStdDevs =
         VecBuilder.fill(4, 4, 10); // lower = more trust in vision
     public static final Matrix<N3, N1> kFrontMultiTagStdDevs = VecBuilder.fill(0.7, 0.7, 2);
+
+    // Object Detection
+    public static final double areaCoefficient = 0.02; // how much to scale yaw based on target area
   }
 
   public static final class FieldConstants {

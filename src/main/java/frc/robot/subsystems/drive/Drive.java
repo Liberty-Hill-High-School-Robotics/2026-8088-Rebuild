@@ -7,8 +7,11 @@
 
 package frc.robot.subsystems.drive;
 
-import static edu.wpi.first.units.Units.*;
-import static frc.robot.subsystems.drive.DriveConstants.*;
+import static edu.wpi.first.units.Units.Volts;
+import static frc.robot.subsystems.drive.DriveConstants.driveBaseRadius;
+import static frc.robot.subsystems.drive.DriveConstants.maxSpeedMetersPerSec;
+import static frc.robot.subsystems.drive.DriveConstants.moduleTranslations;
+import static frc.robot.subsystems.drive.DriveConstants.ppConfig;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
@@ -329,7 +332,7 @@ public class Drive extends SubsystemBase {
 
     boolean DriveOnTarget =
         MathUtil.isNear(
-            angleToTarget, getPose().getRotation().getDegrees(), Constants.kTargetAllowedError);
+            angleToTarget, getPose().getRotation().getDegrees(), Constants.kTargetAllowedError * 3);
     SmartDashboard.putBoolean("Drive On Target Mail", DriveOnTarget);
     Logger.recordOutput("Drive/DriveOnTarget Mail", DriveOnTarget);
 
@@ -424,5 +427,28 @@ public class Drive extends SubsystemBase {
   /** Returns the maximum angular speed in radians per sec. */
   public double getMaxAngularSpeedRadPerSec() {
     return maxSpeedMetersPerSec / driveBaseRadius;
+  }
+
+  public Rotation2d getClosestTrenchAngle() {
+    double currentDeg = getRotation().getDegrees();
+    currentDeg = MathUtil.inputModulus(currentDeg, -180.0, 180.0);
+
+    // Snap to nearest 45°
+    double snappedDeg = Math.round(currentDeg / 45.0) * 45.0;
+
+    // skip 90° angles
+    if (snappedDeg % 90.0 == 0.0) {
+      double lower = snappedDeg - 45.0;
+      double upper = snappedDeg + 45.0;
+
+      // Pick whichever is closer to current heading
+      if (Math.abs(currentDeg - lower) < Math.abs(currentDeg - upper)) {
+        snappedDeg = lower;
+      } else {
+        snappedDeg = upper;
+      }
+    }
+
+    return Rotation2d.fromDegrees(snappedDeg);
   }
 }

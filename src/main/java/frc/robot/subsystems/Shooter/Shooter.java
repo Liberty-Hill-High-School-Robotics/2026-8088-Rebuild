@@ -109,7 +109,7 @@ public class Shooter extends SubsystemBase {
     */
 
     frontVelocity =
-        -7010.64
+        -9150.64
             + (13383.4 * distance)
             - (8682.62 * Math.pow(distance, 2))
             + (2835.12 * Math.pow(distance, 3))
@@ -146,27 +146,23 @@ public class Shooter extends SubsystemBase {
     */
 
     frontVelocity =
-        -7010.64
-            + (13383.4 * distance)
-            - (8682.62 * Math.pow(distance, 2))
-            + (2835.12 * Math.pow(distance, 3))
-            - (454.093 * Math.pow(distance, 4))
-            + (28.4278 * Math.pow(distance, 5));
+        1104.68
+            + (561.773 * distance)
+            - (119.263 * Math.pow(distance, 2))
+            + (8.45353 * Math.pow(distance, 3));
     double backingRatio =
-        22.6983
-            - 32.6589 * distance
-            + 19.6486 * Math.pow(distance, 2)
-            - 5.78241 * Math.pow(distance, 3)
-            + 0.831055 * Math.pow(distance, 4)
-            - 0.0467505 * Math.pow(distance, 5);
+        1.0974
+            + (0.318877 * distance)
+            - (0.0531431 * Math.pow(distance, 2))
+            + (0.00225542 * Math.pow(distance, 3));
     backingRatio = MathUtil.clamp(backingRatio, 0.5, Double.POSITIVE_INFINITY);
     backVelocity = frontVelocity * backingRatio;
 
-    frontVelocity = MathUtil.clamp(frontVelocity, -6700, 6700);
-    backVelocity = MathUtil.clamp(backVelocity, -6700, 6700);
+    frontVelocity = MathUtil.clamp(frontVelocity, -6000, 6000);
+    backVelocity = MathUtil.clamp(backVelocity, -6000, 6000);
 
-    frontVelocity = MathUtil.clamp(frontVelocity, -6700, 6700);
-    backVelocity = MathUtil.clamp(backVelocity, -6700, 6700);
+    SmartDashboard.putNumber("frontCommanded", frontVelocity);
+    SmartDashboard.putNumber("backCommanded", backVelocity);
 
     io.setVelocity(frontVelocity, backVelocity);
   }
