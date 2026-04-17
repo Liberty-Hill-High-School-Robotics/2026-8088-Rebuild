@@ -48,16 +48,16 @@
     },
     {
       "anchor": {
-        "x": 3.3396739900779595,
-        "y": 5.58094968107725
+        "x": 3.1532600992204114,
+        "y": 5.709510985116938
       },
       "prevControl": {
-        "x": 3.1871300633060424,
-        "y": 5.827405100258118
+        "x": 3.0007161724484943,
+        "y": 5.955966404297806
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Top Shoot"
     }
   ],
   "rotationTargets": [
@@ -97,7 +97,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -50.59426981082921
+    "rotation": -48.31094151461144
   },
   "reversed": false,
   "folder": null,

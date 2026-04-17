@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AirMail;
-import frc.robot.commands.DetectAndIntake;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Indexer.IndexerEject;
 import frc.robot.commands.Intake.ChangeIsExtended;
@@ -32,7 +31,6 @@ import frc.robot.commands.Shooter.ChangeTestingBackingRatio;
 import frc.robot.commands.Shooter.ChangeTestingSpeed;
 import frc.robot.commands.Shooter.RampToVelocitySlow;
 import frc.robot.commands.Shooter.SetIsSpinup;
-import frc.robot.commands.Shooter.ShootAtSpeed;
 import frc.robot.subsystems.Indexer.Indexer;
 import frc.robot.subsystems.Indexer.IndexerIO;
 import frc.robot.subsystems.Indexer.IndexerIOSim;
@@ -135,7 +133,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("PivotIn", new ChangeIsExtended(m_intake, false));
     NamedCommands.registerCommand("PivotOut", new ChangeIsExtended(m_intake, true));
     NamedCommands.registerCommand("ShootInHub", new ShootInHub(m_indexer, m_shooter));
-    NamedCommands.registerCommand("SpinUpShooter", new ShootAtSpeed(m_shooter));
+    NamedCommands.registerCommand(
+        "SpinUpShooter", new RampToVelocitySlow(m_shooter, () -> m_drive.getPose()));
 
     NamedCommands.registerCommand(
         "FixAngle",
@@ -200,6 +199,7 @@ public class RobotContainer {
             () -> -m_driverController.getRawAxis(4)));
 
     m_shooter.setDefaultCommand(new RampToVelocitySlow(m_shooter, () -> m_drive.getPose()));
+    m_indexer.setDefaultCommand(new IndexerEject(m_indexer));
 
     // Lock to 0° when Y button is held
     final Trigger JoystickDriveAtZero = m_driverController.button(4);
@@ -225,23 +225,25 @@ public class RobotContainer {
             .ignoringDisable(true));
 
     // Lock to 45° when left trigger is held, for use when crossing the trench
-        final Trigger DriveCrossTrench = m_driverController.axisGreaterThan(2, .1);
-        DriveCrossTrench.whileTrue(
-            DriveCommands.joystickDriveAtAngle(
-                m_drive,
-                () -> -m_driverController.getRawAxis(1),
-                () -> -m_driverController.getRawAxis(0),
-                () -> m_drive.getClosestTrenchAngle()));
-                
+    final Trigger DriveCrossTrench = m_driverController.axisGreaterThan(2, .1);
+    DriveCrossTrench.whileTrue(
+        DriveCommands.joystickDriveAtAngle(
+            m_drive,
+            () -> -m_driverController.getRawAxis(1),
+            () -> -m_driverController.getRawAxis(0),
+            () -> m_drive.getClosestTrenchAngle()));
+    /* Being used as driver camera
     final Trigger DetectAndIntake = m_driverController.axisGreaterThan(3, .1);
     DetectAndIntake.whileTrue(
         new DetectAndIntake(
             m_drive,
-            /*m_intake,
+            /*m_intafke,
             m_indexer,
             */
-            () -> m_vision.getOBJYaw(),
-            () -> (-m_driverController.getRawAxis(3)) / 3));
+    /*
+           () -> m_vision.getOBJYaw(),
+           () -> (-m_driverController.getRawAxis(3)) / 3));
+    */
 
     final Trigger SwitchToTeleTab = m_driverController.button(5);
     SwitchToTeleTab.onTrue(Commands.runOnce(() -> Elastic.selectTab(0)).ignoringDisable(true));

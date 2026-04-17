@@ -13,8 +13,8 @@ public class Shooter extends SubsystemBase {
   private java.util.function.Supplier<edu.wpi.first.math.geometry.Pose2d> poseSupplier;
   private boolean isSpinUp = false;
 
-  private double frontVelocity = 0;
-  private double backVelocity = 0;
+  private double frontVelocity = 1000000; // set to a number too high to reach
+  private double backVelocity = 1000000;
 
   private double testingPoint = 3000;
   private double testBackingRatio = .3;
@@ -52,8 +52,8 @@ public class Shooter extends SubsystemBase {
     Logger.recordOutput("Shooter/Front/Setpoint", frontVelocity, "rpm");
     Logger.recordOutput("Shooter/Back/Setpoint", backVelocity, "rpm");
 
-    boolean frontAtSpeed = MathUtil.isNear(frontVelocity + 50, inputs.frontVelocity, 75);
-    boolean backAtSpeed = MathUtil.isNear(backVelocity + 50, inputs.backVelocity, 75);
+    boolean frontAtSpeed = MathUtil.isNear(frontVelocity, inputs.frontVelocity, 75);
+    boolean backAtSpeed = MathUtil.isNear(backVelocity, inputs.backVelocity, 75);
 
     SmartDashboard.putBoolean("Shooter/Front/AtSpeed", frontAtSpeed);
     SmartDashboard.putBoolean("Shooter/Back/AtSpeed", backAtSpeed);
@@ -78,7 +78,7 @@ public class Shooter extends SubsystemBase {
     backVelocity = frontVelocity * backingRatio;
     */
     frontVelocity =
-        -7010.64
+        -6960.64
             + (13383.4 * distance)
             - (8682.62 * Math.pow(distance, 2))
             + (2835.12 * Math.pow(distance, 3))
@@ -109,7 +109,7 @@ public class Shooter extends SubsystemBase {
     */
 
     frontVelocity =
-        -9150.64
+        -6960.64
             + (13383.4 * distance)
             - (8682.62 * Math.pow(distance, 2))
             + (2835.12 * Math.pow(distance, 3))
@@ -144,7 +144,6 @@ public class Shooter extends SubsystemBase {
     double backingRatio = MotorSpeeds.kDistanceToBackingMail.get(distance);
     backVelocity = frontVelocity * backingRatio;
     */
-
     frontVelocity =
         1104.68
             + (561.773 * distance)
@@ -158,8 +157,8 @@ public class Shooter extends SubsystemBase {
     backingRatio = MathUtil.clamp(backingRatio, 0.5, Double.POSITIVE_INFINITY);
     backVelocity = frontVelocity * backingRatio;
 
-    frontVelocity = MathUtil.clamp(frontVelocity, -6000, 6000);
-    backVelocity = MathUtil.clamp(backVelocity, -6000, 6000);
+    frontVelocity = MathUtil.clamp(frontVelocity, -6000, 5750);
+    backVelocity = MathUtil.clamp(backVelocity, -6000, 5750);
 
     SmartDashboard.putNumber("frontCommanded", frontVelocity);
     SmartDashboard.putNumber("backCommanded", backVelocity);
@@ -198,7 +197,7 @@ public class Shooter extends SubsystemBase {
   /** Stops the flywheel. */
   public void shooterStop() {
     io.stop();
-    frontVelocity = 0;
-    backVelocity = 0;
+    frontVelocity = 1000000; // Set to a number too high to reach
+    backVelocity = 1000000;
   }
 }

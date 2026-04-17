@@ -88,7 +88,7 @@ public final class Constants {
   public static final class MotorSpeeds {
 
     // Shooter Front
-    public static final double kShooterFrontP = 0.0001;
+    public static final double kShooterFrontP = 0.0002;
     public static final double kShooterFrontI = 0.0;
     public static final double kShooterFrontD = 0.0001;
 
@@ -149,9 +149,9 @@ public final class Constants {
     public static final double kIndexSpeed = 500.0; // speed to run index motor RPM
 
     public static final SlewRateLimiter kFrontLimiter =
-        new SlewRateLimiter(500); // 500 rpm/s acceleration limit
+        new SlewRateLimiter(1500); // 1000 rpm/s acceleration limit
     public static final SlewRateLimiter kBackLimiter =
-        new SlewRateLimiter(500); // 500 rpm/s acceleration limit
+        new SlewRateLimiter(1500); // 1000 rpm/s acceleration limit
   }
 
   public static final class OIConstants {

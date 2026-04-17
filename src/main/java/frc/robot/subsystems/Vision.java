@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 import java.util.List;
 import java.util.Optional;
-import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -24,7 +23,7 @@ public class Vision extends SubsystemBase {
   // make sure the name in quotes is EXACTLY the same as it is in PV
   PhotonCamera FrontTagCam = new PhotonCamera("FrontTagCam");
   PhotonCamera SideTagCam = new PhotonCamera("SideTagCam");
-  PhotonCamera OBJCam = new PhotonCamera("OBJCam");
+  // PhotonCamera OBJCam = new PhotonCamera("OBJCam");
 
   private final EstimateConsumer estConsumer;
   private final PhotonPoseEstimator frontPhotonEstimator;
@@ -85,7 +84,7 @@ public class Vision extends SubsystemBase {
             estConsumer.accept(est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
           });
     }
-
+    /*
     // Object Detection
     if (OBJCam.getLatestResult().hasTargets()) {
       PhotonTrackedTarget target = OBJCam.getLatestResult().getBestTarget();
@@ -94,6 +93,7 @@ public class Vision extends SubsystemBase {
       objYaw = 0.0;
     }
     Logger.recordOutput("Vision/OBJYaw", objYaw, "degrees");
+    */
   }
 
   @Override

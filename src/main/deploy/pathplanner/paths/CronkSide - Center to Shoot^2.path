@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.186435152374203,
-        "y": 3.530396881644223
+        "x": 7.5693408929837,
+        "y": 3.5625372076541453
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.077325520164825,
-        "y": 3.1680850145910107
+        "x": 7.4602312607743215,
+        "y": 3.200225340600933
       },
       "isLocked": false,
       "linkedName": "Low Center^2"
@@ -63,7 +63,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 49.497151614667786
+    "rotation": 49.49715161466779
   },
   "reversed": false,
   "folder": null,

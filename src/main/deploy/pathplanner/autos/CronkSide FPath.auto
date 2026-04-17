@@ -36,7 +36,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 0.75
+                  "waitTime": 3.0
                 }
               },
               {
@@ -84,9 +84,28 @@
                 }
               },
               {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "SpinUpShooter"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
                 "type": "named",
                 "data": {
-                  "name": "SpinUpShooter"
+                  "name": "IntakeIn"
                 }
               }
             ]
@@ -99,7 +118,7 @@
               {
                 "type": "wait",
                 "data": {
-                  "waitTime": 1.0
+                  "waitTime": 2.0
                 }
               },
               {
@@ -130,6 +149,12 @@
               {
                 "type": "named",
                 "data": {
+                  "name": "SpinUpShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
                   "name": "IntakeIn"
                 }
               }
@@ -150,6 +175,12 @@
                 "type": "named",
                 "data": {
                   "name": "SpinUpShooter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeIn"
                 }
               }
             ]
