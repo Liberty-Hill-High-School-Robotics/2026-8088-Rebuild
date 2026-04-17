@@ -179,6 +179,7 @@ public class RobotContainer {
         "ShooterBackinRatioUPSmall", new ChangeTestingBackingRatio(m_shooter, .01));
     SmartDashboard.putData(
         "ShooterBackinRatioDOWNSmall", new ChangeTestingBackingRatio(m_shooter, -.01));
+    SmartDashboard.putData("ShootInHub", new ShootInHub(m_indexer, m_shooter));
 
     // Configure the button bindings
     configureButtonBindings();

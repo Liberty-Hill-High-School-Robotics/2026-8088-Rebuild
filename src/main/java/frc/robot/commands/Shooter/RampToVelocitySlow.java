@@ -32,11 +32,13 @@ public class RampToVelocitySlow extends Command {
 
   @Override
   public void execute() {
-    if (isInAllianceZone(poseSupplier.get().getX()) && m_shooter.getIsSpinup()) {
-      m_shooter.rampToVelocitySlow();
+    if (m_shooter.getIsSpinup()) {
+      if (isInAllianceZone(poseSupplier.get().getX())) {
+        m_shooter.rampToVelocitySlow(false);
+      } else {
+        m_shooter.rampToVelocitySlow(true);
+      }
     } else {
-      MotorSpeeds.kFrontLimiter.reset(m_shooter.getVelocities()[0]);
-      MotorSpeeds.kBackLimiter.reset(m_shooter.getVelocities()[1]);
       m_shooter.shooterStop();
     }
   }

@@ -3,36 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.6900000000000001,
-        "y": 5.953777462792345
+        "x": 2.6582990786676124,
+        "y": 6.095194897236002
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9163337274353703,
-        "y": 5.758478146958582
+        "x": 1.8239312500193696,
+        "y": 6.300417123662105
       },
       "isLocked": false,
-      "linkedName": "Depot"
+      "linkedName": "RobN't Shoot"
     },
     {
       "anchor": {
-        "x": 2.4223784104431605,
-        "y": 4.642894424668491
+        "x": 0.7,
+        "y": 5.953777462792345
       },
       "prevControl": {
-        "x": 1.6495292667632873,
-        "y": 5.2916692745600935
+        "x": 0.40866721192245475,
+        "y": 6.000884663049062
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Mid Shoot"
+      "linkedName": "Depot"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.13665254237288174,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.7823585810163013,
+      "minWaypointRelativePos": 0.43402545210984617,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
         "maxVelocity": 1.0,
@@ -56,13 +61,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -19.116692001283305
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": "HubSide",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -46.47352146740416
   },
   "useDefaultConstraints": true
 }

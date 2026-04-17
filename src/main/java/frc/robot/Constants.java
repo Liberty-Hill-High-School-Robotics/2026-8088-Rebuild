@@ -149,9 +149,9 @@ public final class Constants {
     public static final double kIndexSpeed = 500.0; // speed to run index motor RPM
 
     public static final SlewRateLimiter kFrontLimiter =
-        new SlewRateLimiter(1500); // 1000 rpm/s acceleration limit
+        new SlewRateLimiter(1000); // 1000 rpm/s acceleration limit
     public static final SlewRateLimiter kBackLimiter =
-        new SlewRateLimiter(1500); // 1000 rpm/s acceleration limit
+        new SlewRateLimiter(1000); // 1000 rpm/s acceleration limit
   }
 
   public static final class OIConstants {
