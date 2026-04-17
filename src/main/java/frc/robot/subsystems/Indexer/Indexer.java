@@ -4,16 +4,18 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.MotorSpeeds;
+import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
   private final IndexerIO io;
   private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
   private double setpoint = 0;
+  private BooleanSupplier intakePivotState;
 
-  public Indexer(IndexerIO io) {
+  public Indexer(IndexerIO io, BooleanSupplier intakePivotState) {
     this.io = io;
-
+    this.intakePivotState = intakePivotState;
     // Switch constants based on mode (the physics simulator is treated as a
     // separate robot with different tuning)
     switch (Constants.currentMode) {
@@ -89,5 +91,15 @@ public class Indexer extends SubsystemBase {
   public void indexReverse() {
     io.setVelocity(-MotorSpeeds.kIndexSpeed);
     setpoint = -MotorSpeeds.kIndexSpeed;
+  }
+
+  public void indexerIdle() {
+    if (intakePivotState.getAsBoolean()) {
+      io.setVelocity(-MotorSpeeds.kIndexSpeed);
+      setpoint = -MotorSpeeds.kIndexSpeed;
+    } else {
+      io.stop();
+      setpoint = 0;
+    }
   }
 }

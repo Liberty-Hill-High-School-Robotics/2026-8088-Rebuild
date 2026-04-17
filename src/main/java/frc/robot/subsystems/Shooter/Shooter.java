@@ -109,7 +109,7 @@ public class Shooter extends SubsystemBase {
     */
 
     frontVelocity =
-        -6960.64
+        -6985.64
             + (13383.4 * distance)
             - (8682.62 * Math.pow(distance, 2))
             + (2835.12 * Math.pow(distance, 3))

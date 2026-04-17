@@ -93,4 +93,8 @@ public class Intake extends SubsystemBase {
   public boolean getIsIntakeJammed() {
     return !MathUtil.isNear(intakeSetpoint, inputs.intakeVelocity, 500);
   }
+
+  public boolean getIsNearExtended() {
+    return MathUtil.isNear(Constants.kIntakePiviotExtendedLim, inputs.intakePositionRad, 3);
+  }
 }

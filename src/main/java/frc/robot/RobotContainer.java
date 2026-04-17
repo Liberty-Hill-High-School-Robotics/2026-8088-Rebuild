@@ -23,6 +23,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.AirMail;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.Indexer.IndexerEject;
+import frc.robot.commands.Indexer.IndexerIdle;
 import frc.robot.commands.Intake.ChangeIsExtended;
 import frc.robot.commands.Intake.Eject;
 import frc.robot.commands.Intake.IntakeIn;
@@ -92,7 +93,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIOSparkFlex());
         m_shooter = new Shooter(new ShooterIOSparkFlex(), () -> m_drive.getPose());
         m_vision = new Vision(m_drive::addVisionMeasurement);
-        m_indexer = new Indexer(new IndexerIOSparkFlex());
+        m_indexer = new Indexer(new IndexerIOSparkFlex(), () -> m_intake.getIsNearExtended());
         break;
 
       case SIM:
@@ -107,7 +108,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIOSim());
         m_shooter = new Shooter(new ShooterIOSim(), () -> m_drive.getPose());
         m_vision = new Vision(m_drive::addVisionMeasurement); // TODO: update vision for sim
-        m_indexer = new Indexer(new IndexerIOSim());
+        m_indexer = new Indexer(new IndexerIOSim(), () -> m_intake.getIsNearExtended());
         break;
 
       default:
@@ -122,7 +123,7 @@ public class RobotContainer {
         m_intake = new Intake(new IntakeIO() {});
         m_shooter = new Shooter(new ShooterIO() {}, () -> m_drive.getPose());
         m_vision = new Vision(m_drive::addVisionMeasurement);
-        m_indexer = new Indexer(new IndexerIO() {});
+        m_indexer = new Indexer(new IndexerIO() {}, () -> m_intake.getIsNearExtended());
         break;
     }
 
@@ -199,7 +200,7 @@ public class RobotContainer {
             () -> -m_driverController.getRawAxis(4)));
 
     m_shooter.setDefaultCommand(new RampToVelocitySlow(m_shooter, () -> m_drive.getPose()));
-    m_indexer.setDefaultCommand(new IndexerEject(m_indexer));
+    m_indexer.setDefaultCommand(new IndexerIdle(m_indexer));
 
     // Lock to 0° when Y button is held
     final Trigger JoystickDriveAtZero = m_driverController.button(4);
