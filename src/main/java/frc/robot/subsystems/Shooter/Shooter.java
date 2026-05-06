@@ -57,6 +57,8 @@ public class Shooter extends SubsystemBase {
 
     SmartDashboard.putBoolean("Shooter/Front/AtSpeed", frontAtSpeed);
     SmartDashboard.putBoolean("Shooter/Back/AtSpeed", backAtSpeed);
+
+    Logger.recordOutput("Shooter/IsSpinUp", isSpinUp);
   }
 
   @Override
@@ -121,8 +123,8 @@ public class Shooter extends SubsystemBase {
       backingRatio = MathUtil.clamp(backingRatio, 0.5, Double.POSITIVE_INFINITY);
       backVelocity = frontVelocity * backingRatio;
 
-      frontVelocity = MathUtil.clamp(frontVelocity, -6000, 5750);
-      backVelocity = MathUtil.clamp(backVelocity, -6000, 5750);
+      frontVelocity = MathUtil.clamp(frontVelocity, -6000, 5000);
+      backVelocity = MathUtil.clamp(backVelocity, -6000, 5000);
     } else {
       double distance = SmartDashboard.getNumber("Distance to Target Hub", 0);
       frontVelocity =
@@ -174,8 +176,8 @@ public class Shooter extends SubsystemBase {
     backingRatio = MathUtil.clamp(backingRatio, 0.5, Double.POSITIVE_INFINITY);
     backVelocity = frontVelocity * backingRatio;
 
-    frontVelocity = MathUtil.clamp(frontVelocity, -6000, 5750);
-    backVelocity = MathUtil.clamp(backVelocity, -6000, 5750);
+    frontVelocity = MathUtil.clamp(frontVelocity, -6000, 5000);
+    backVelocity = MathUtil.clamp(backVelocity, -6000, 5000);
 
     SmartDashboard.putNumber("frontCommanded", frontVelocity);
     SmartDashboard.putNumber("backCommanded", backVelocity);

@@ -38,7 +38,7 @@ public class IntakeIOSparkFlex implements IntakeIO {
     SparkFlexConfig intakePivotConfig = new SparkFlexConfig();
     intakePivotConfig
         .inverted(true)
-        .smartCurrentLimit(35)
+        .smartCurrentLimit(40)
         .closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .p(MotorSpeeds.kIntakePivotP)
